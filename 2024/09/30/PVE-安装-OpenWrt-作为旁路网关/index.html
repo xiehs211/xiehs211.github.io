@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
   
-  <meta name="robots" content="noindex,follow">
+  
   <meta name="generator" content="Hexo 7.3.0">
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   
@@ -17,16 +17,42 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>Archives - Hexo</title>
+  <title>PVE 安装 OpenWrt 作为旁路网关 - Hexo</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Archives">
-<meta property="og:url" content="http://example.com/archives/2025/">
+    <meta name="description" content="背景已经有了ALL IN ONE，上面安装了PVE。这是安装 OpenWrt 作为旁路网关的记录。 题外话为什么选择 All-in-One 这样的方案？知乎上面有很多 AIO 的劝退贴1，主要的观点例如：部署稳定的AIO需要比较高的技术门槛，并且一旦出现故障会影响家庭网路，数据安全很难保证云云，这些对于小白来说确实是不小的问题。然而，作为一个相关领域的从业人员，并且有玩过 VPS 和虚拟机经验的我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PVE 安装 OpenWrt 作为旁路网关">
+<meta property="og:url" content="http://example.com/2024/09/30/PVE-%E5%AE%89%E8%A3%85-OpenWrt-%E4%BD%9C%E4%B8%BA%E6%97%81%E8%B7%AF%E7%BD%91%E5%85%B3/">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景已经有了ALL IN ONE，上面安装了PVE。这是安装 OpenWrt 作为旁路网关的记录。 题外话为什么选择 All-in-One 这样的方案？知乎上面有很多 AIO 的劝退贴1，主要的观点例如：部署稳定的AIO需要比较高的技术门槛，并且一旦出现故障会影响家庭网路，数据安全很难保证云云，这些对于小白来说确实是不小的问题。然而，作为一个相关领域的从业人员，并且有玩过 VPS 和虚拟机经验的我">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/ZkEIJHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/IyiJJHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/Eq9r9HK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/Jyw1KHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/MkJKJHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/dknE9HK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/P6LKJHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/y7vE9HK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/Q1yS9HK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/QibT9HK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/cmLT9HK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/O5oT9HK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/iOuU9HK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/dhpU9HK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/K1PGKHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/7fBgKHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/eyI6KHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/rXYrKHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/FkFSKHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/DhlSKHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/AWtsKHK.png">
+<meta property="article:published_time" content="2024-09-30T12:04:56.000Z">
+<meta property="article:modified_time" content="2025-08-15T12:07:48.441Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://roim-picx-bpc.pages.dev/rest/ZkEIJHK.png">
   
   
   
@@ -42,12 +68,12 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com","author":{"@type":"Person","name":"John Doe","sameAs":[]},"name":"Hexo","description":"","url":"http://example.com"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2024-09-30T20:04:56+08:00","dateModified":"2025-08-15T20:07:48+08:00","datePublished":"2024-09-30T20:04:56+08:00","description":"","headline":"PVE 安装 OpenWrt 作为旁路网关","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/09/30/PVE-%E5%AE%89%E8%A3%85-OpenWrt-%E4%BD%9C%E4%B8%BA%E6%97%81%E8%B7%AF%E7%BD%91%E5%85%B3/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2024/09/30/PVE-%E5%AE%89%E8%A3%85-OpenWrt-%E4%BD%9C%E4%B8%BA%E6%97%81%E8%B7%AF%E7%BD%91%E5%85%B3/","image":[]}</script>
   
 </head>
 <body>
 
-<div class="l_body index" id="start" layout="undefined" type="undefined" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
 <header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
@@ -59,21 +85,101 @@
 <div class="widgets">
 <div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
 
+
+
 <widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2024/09/30/Halo%E4%B8%BB%E9%A2%98%E5%AD%97%E4%BD%93%E7%BE%8E%E5%8C%96/"><span class="title">Halo主题字体美化</span></a><a class="item title" href="/2024/09/30/PVE-%E5%AE%89%E8%A3%85-OpenWrt-%E4%BD%9C%E4%B8%BA%E6%97%81%E8%B7%AF%E7%BD%91%E5%85%B3/"><span class="title">PVE 安装 OpenWrt 作为旁路网关</span></a><a class="item title" href="/2024/09/30/PVE%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE/"><span class="title">PVE安装后的初始化配置</span></a><a class="item title" href="/2025/08/15/%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/"><span class="title">第一篇文章</span></a><a class="item title" href="/2025/08/15/hello-world/"><span class="title">Hello World</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
 
-<header class="header mobile-only"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
-
- 
 
 
-<div class="navbar top"><div class="navbar-blur"><div class="navbar-container"><nav class="post"><a href="/">Recent</a><a class="active" href="/archives/">Archives</a></nav></div></div></div><div class="post-list archives"><article class="" id="archive"><div class='archive-header h4'>2025</div><div class="archive-list"><a class='post fs14' href="/2025/08/15/%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/"><time>08-15</time><span>第一篇文章</span></a></div><div class="archive-list"><a class='post fs14' href="/2025/08/15/hello-world/"><time>08-15</time><span>Hello World</span></a></div></article><article class="" id="archive"><div class='archive-header h4'>2024</div><div class="archive-list"><a class='post fs14' href="/2024/09/30/Halo%E4%B8%BB%E9%A2%98%E5%AD%97%E4%BD%93%E7%BE%8E%E5%8C%96/"><time>09-30</time><span>Halo主题字体美化</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/09/30/PVE-%E5%AE%89%E8%A3%85-OpenWrt-%E4%BD%9C%E4%B8%BA%E6%97%81%E8%B7%AF%E7%BD%91%E5%85%B3/"><time>09-30</time><span>PVE 安装 OpenWrt 作为旁路网关</span></a></div><div class="archive-list"><a class='post fs14' href="/2024/09/30/PVE%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE/"><time>09-30</time><span>PVE安装后的初始化配置</span></a></div></article></div>
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-09-30T12:04:56.000Z">2024-09-30</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-08-15T12:07:48.441Z">2025-08-15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>PVE 安装 OpenWrt 作为旁路网关</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>已经有了ALL IN ONE，上面安装了PVE。这是安装 OpenWrt 作为旁路网关的记录。</p>
+<p>题外话<br>为什么选择 All-in-One 这样的方案？知乎上面有很多 AIO 的劝退贴1，主要的观点例如：部署稳定的AIO需要比较高的技术门槛，并且一旦出现故障会影响家庭网路，数据安全很难保证云云，这些对于小白来说确实是不小的问题。然而，作为一个相关领域的从业人员，并且有玩过 VPS 和虚拟机经验的我来说，还是要体验一次。</p>
+<p>我的主要需求一个是旁路网关，使用旁路网关的方式可以避免一出问题全屋上不了网的情况了。</p>
+<h1 id="组网"><a href="#组网" class="headerlink" title="组网"></a>组网</h1><p>目前计划的网路连接<br><img src="https://roim-picx-bpc.pages.dev/rest/ZkEIJHK.png" alt="4.png"></p>
+<p>开始部署</p>
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><ol>
+<li>安装好的 PVE 系统</li>
+<li>OpenWrt 系统镜像。为了扩容方便，选择使用 Ext4 分区的 generic-ext4-combined-efi.img.gz 文件。<a target="_blank" rel="noopener" href="https://archive.openwrt.org/releases/23.05.4/targets/x86/64/">下载页面</a>，在 root 首页找最新版本</li>
+<li>GParted Live CD 镜像，用来修改系统分区大小。<a target="_blank" rel="noopener" href="https://gparted.org/download.php">下载页面</a></li>
+</ol>
+<h1 id="创建虚拟机"><a href="#创建虚拟机" class="headerlink" title="创建虚拟机"></a>创建虚拟机</h1><p>Openwrt 需要的资源并不多，可以根据自己需要划分内存和 CPU。选择的镜像是 efi 的，所以 BIOS 要选择 UEFI 的，不需要勾选添加 EFI 磁盘。在磁盘页面也不需要添加磁盘，稍后会从镜像导入。</p>
+<ol>
+<li>选中数据中心，点击“创建虚拟机”按钮，勾上“高级”，勾上“开机自启动”（软路由一般情况下开机自启动较好），名称填入虚拟机名称openwrt，点击“下一步”<br><img src="https://roim-picx-bpc.pages.dev/rest/IyiJJHK.png" alt="7.png"></li>
+<li>操作系统选择“Linux”，版本选择“6.X-2.6 Kernel”即可，先不选择介质，点击“下一步”<br><img src="https://roim-picx-bpc.pages.dev/rest/Eq9r9HK.png" alt="14.png"></li>
+<li>系统选择默认seabios即可，不选择存储，稍后会从镜像导入。点击“下一步”，磁盘删除掉。<br><img src="https://roim-picx-bpc.pages.dev/rest/Jyw1KHK.png" alt="23.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/MkJKJHK.png" alt="10.png"><br>cpu默认1，至少改成2核，最多和物理线程一样（我是2核心4线程，可以改到4，先用的2）<br><img src="https://roim-picx-bpc.pages.dev/rest/dknE9HK.png" alt="12.png"><br>下一步内存修改2048到1024，即为1GB<br><img src="https://roim-picx-bpc.pages.dev/rest/P6LKJHK.png" alt="11.png"><br>网络默认半虚拟化。目前就1个网卡。<br><img src="https://roim-picx-bpc.pages.dev/rest/y7vE9HK.png" alt="13.png"></li>
+<li>登录 PVE，下载镜像文件，并解压：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /var/lib/vz/template/iso</span><br><span class="line">本地下载后上传</span><br><span class="line">gunzip openwrt-23.05.4-x86-64-generic-ext4-combined-efi.img.gz</span><br></pre></td></tr></table></figure>
+
+<p>将磁盘镜像文件导入到刚刚创建的虚拟机：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># qm disk import &lt;vmid&gt; &lt;source&gt; &lt;storage&gt; [OPTIONS]</span><br><span class="line">qm disk import 100 openwrt-23.05.4-x86-64-generic-ext4-combined-efi.img local-lvm</span><br></pre></td></tr></table></figure>
+
+<p>然后回到 PVE 管理网页，选中新的磁盘双击，添加。<br><img src="https://roim-picx-bpc.pages.dev/rest/Q1yS9HK.png" alt="15.png"><br>现在可以开机进入系统了。但是不急，默认磁盘的剩余空间很小，放不了很多东西。为了以后考虑，还要给磁盘扩容。</p>
+<h1 id="磁盘扩容"><a href="#磁盘扩容" class="headerlink" title="磁盘扩容"></a>磁盘扩容</h1><p>选中硬盘 &gt; 磁盘操作 &gt; 调整磁盘大小，扩大虚拟磁盘的大小为2G。<br><img src="https://roim-picx-bpc.pages.dev/rest/QibT9HK.png" alt="16.png"><br>接下来是调整分区大小。这一步是可以用命令做的，我偷了一点懒，懒得学分区操作的命令，用了图形化分区工具 GParted，操作起来比较简单。</p>
+<p>先在 PVE 的 ISO 镜像储存界面上传 GParted 镜像，然后给 OpenWrt 的虚拟机的 CD&#x2F;DVD 添加上。在 选项 &gt; 引导顺序 中调整到光盘最高。<br><img src="https://roim-picx-bpc.pages.dev/rest/cmLT9HK.png" alt="17.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/O5oT9HK.png" alt="18.png"><br>进入系统之后，操作很方便了。根据提示修复错误，然后右键 rootfs 分区调整大小，拖动箭头，把剩余空间拉满就可以了。<br><img src="https://roim-picx-bpc.pages.dev/rest/iOuU9HK.png" alt="21.png"><br>点击修复&#x2F;fix<br><img src="https://roim-picx-bpc.pages.dev/rest/dhpU9HK.png" alt="20.png"><br>最后点击打勾保存关机。</p>
+<p>然后我们在左上角的添加，网络设备中，添加第二块网卡，依旧默认选择半虚拟化就行。<br><img src="https://roim-picx-bpc.pages.dev/rest/K1PGKHK.png" alt="24.png"></p>
+<p>2个虚拟网卡接入了一个网桥，实际是一个物理网口。</p>
+<p>移除光盘，调整启动顺序，<br><img src="https://roim-picx-bpc.pages.dev/rest/7fBgKHK.png" alt="25.png"><br>重新启动，就能够进入系统了。</p>
+<h1 id="修改ip"><a href="#修改ip" class="headerlink" title="修改ip"></a>修改ip</h1><p>进入openwrt的shell页面，<br>vi &#x2F;etc&#x2F;config&#x2F;network<br>找到config interface lan这一段代码</p>
+<p>在option ipaddr 这里把原来的’192.168.1.1’ 改成你需要的ip，比如我这里改成192.168.31.2<br>保存退出</p>
+<p>在shell页面输入reboot，重启openwrt，<br>查看ip是否正确配置：<br><img src="https://roim-picx-bpc.pages.dev/rest/eyI6KHK.png" alt="26.png"><br>现在已经正确获取了 IP 地址，可以用 SSH 连接或者浏览器访问管理页面了。</p>
+<p>一些基础配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 软件源换成清华镜像源</span><br><span class="line">sed -i &#x27;s_downloads.openwrt.org_mirrors.tuna.tsinghua.edu.cn/openwrt_&#x27; /etc/opkg/distfeeds.conf</span><br><span class="line"># 更新软件包索引</span><br><span class="line">opkg update</span><br><span class="line"># 中文包</span><br><span class="line">opkg install luci-i18n-base-zh-cn</span><br><span class="line">opkg install luci-i18n-firewall-zh-cn</span><br><span class="line"># mDNS 支持，安装后可以用 http://openwrt.local 打开管理页面</span><br><span class="line"># opkg install avahi-daemon-service-http</span><br><span class="line"># 未测试，笔者依旧直接ip浏览器打开</span><br></pre></td></tr></table></figure>
+
+<p>在浏览器中输入你刚才改好的ip地址，访问openwrt的管理页面。</p>
+<p>在 OpenWrt 网页管理页面，网络 &gt; 接口 里面，把 DHCP 相关的设置关掉，因为旁路由不需要提供 DHCP 服务。<br><img src="https://roim-picx-bpc.pages.dev/rest/rXYrKHK.png" alt="27.png"></p>
+<h1 id="终端配置"><a href="#终端配置" class="headerlink" title="终端配置"></a>终端配置</h1><p>有两种办法，一种是在设备上手动设置网关为软路由的IP地址，另一种是在主路由上面把 DHCP 默认网关设置为软路由的 IP。为了稳定，我用手动配置的办法。</p>
+<ol>
+<li>先测试没有修改，自动dhcp<br><img src="https://roim-picx-bpc.pages.dev/rest/FkFSKHK.png" alt="28.png"><br>可以看到，直接回到主路由31.1访问</li>
+<li>修改网关和dns给旁路网关<br><img src="https://roim-picx-bpc.pages.dev/rest/DhlSKHK.png" alt="29.png"></li>
+<li>测试效果<br><img src="https://roim-picx-bpc.pages.dev/rest/AWtsKHK.png" alt="30.png"><br>可以看到第一跳、第二跳、第三跳分别是旁路网关、我的硬路由和光猫，然后是联通的网络，最后到达目标地址。</li>
+</ol>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2024/09/30/Halo%E4%B8%BB%E9%A2%98%E5%AD%97%E4%BD%93%E7%BE%8E%E5%8C%96/">Halo主题字体美化</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2024/09/30/PVE%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E9%85%8D%E7%BD%AE/">PVE安装后的初始化配置</a></div></section></div>
+
+
+
+
+
+
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%84%E7%BD%91"><span class="toc-text">组网</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%86%E5%A4%87"><span class="toc-text">准备</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-text">创建虚拟机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E6%89%A9%E5%AE%B9"><span class="toc-text">磁盘扩容</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9ip"><span class="toc-text">修改ip</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%88%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="toc-text">终端配置</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
