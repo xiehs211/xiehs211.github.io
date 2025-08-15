@@ -1,0 +1,1018 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>PVE ct模板使用istoreos的旁路网关 - Hexo</title>
+
+  
+    <meta name="description" content="OpenWRT常规img.gz转化为PVE LXC CT模版rootfs.tar.gz以及简单LXC OP的安装与基本设置以旁路网关模式为例 转CT模板下载img页面 1https:&#x2F;&#x2F;fw.koolcenter.com&#x2F;iStoreOS&#x2F;x86_64_efi&#x2F;  复制最新的去命令行下载 123456wget https:&#x2F;&#x2F;fw0.koolcenter.com&#x2F;iStoreOS&#x2F;x86_64_e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PVE ct模板使用istoreos的旁路网关">
+<meta property="og:url" content="http://example.com/2024/09/30/PVE%20ct%E6%A8%A1%E6%9D%BF%E4%BD%BF%E7%94%A8istoreos%E7%9A%84%E6%97%81%E8%B7%AF%E7%BD%91%E5%85%B3/">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="OpenWRT常规img.gz转化为PVE LXC CT模版rootfs.tar.gz以及简单LXC OP的安装与基本设置以旁路网关模式为例 转CT模板下载img页面 1https:&#x2F;&#x2F;fw.koolcenter.com&#x2F;iStoreOS&#x2F;x86_64_efi&#x2F;  复制最新的去命令行下载 123456wget https:&#x2F;&#x2F;fw0.koolcenter.com&#x2F;iStoreOS&#x2F;x86_64_e">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/rv4wkHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/30owkHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/SLcALHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/flsaLHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/2P3BLHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/trWbLHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/D0obLHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/AAH1LHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/KIT1LHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/FdkClHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/grIkmHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/lfWLmHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/vkiZPHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/6eCzPHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/B7azPHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/y4HzPHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/SELzPHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/0mZzPHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/O4HapHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/XrqhpHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/SXxHpHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/QEphpHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/NcBhpHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/Nz37pHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/c2B0pHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/88M0pHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/U537pHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/FkFSKHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/DhlSKHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/AWtsKHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/XjbsQHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/b4HU1hK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/cCgU1hK.png">
+<meta property="article:published_time" content="2024-09-30T12:25:22.000Z">
+<meta property="article:modified_time" content="2025-08-15T12:40:04.878Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://roim-picx-bpc.pages.dev/rest/rv4wkHK.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2024-09-30T20:25:22+08:00","dateModified":"2025-08-15T20:40:04+08:00","datePublished":"2024-09-30T20:25:22+08:00","description":"","headline":"PVE ct模板使用istoreos的旁路网关","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/09/30/PVE%20ct%E6%A8%A1%E6%9D%BF%E4%BD%BF%E7%94%A8istoreos%E7%9A%84%E6%97%81%E8%B7%AF%E7%BD%91%E5%85%B3/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2024/09/30/PVE%20ct%E6%A8%A1%E6%9D%BF%E4%BD%BF%E7%94%A8istoreos%E7%9A%84%E6%97%81%E8%B7%AF%E7%BD%91%E5%85%B3/","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/08/11/%E5%AE%9D%E5%A1%94%E9%83%A8%E7%BD%B2message-pusher/"><span class="title">宝塔部署message-pusher</span></a><a class="item title" href="/2025/07/27/pine%E7%89%88%E6%9C%AC5%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%89%88%E6%9C%AC6%E5%90%8E%EF%BC%8C%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7%E5%8F%98%E5%A4%9A%E4%BA%86%EF%BC%9F/"><span class="title">pine版本5转换为版本6后，交易信号变多了？</span></a><a class="item title" href="/2025/07/21/pine%20%E7%AD%96%E7%95%A5%E4%BA%A4%E6%98%93%E6%98%BE%E7%A4%BAlabel/"><span class="title">pine 策略交易显示label</span></a><a class="item title" href="/2025/07/20/pine%E6%9B%BF%E4%BB%A3ifelse%E7%9A%84switch%E8%AF%AD%E6%B3%95/"><span class="title">pine替代ifelse的switch语法</span></a><a class="item title" href="/2025/07/20/pine%E5%A4%9A%E5%B8%81%E7%A7%8D%E7%AD%96%E7%95%A5%E8%AD%A6%E6%8A%A5/"><span class="title">pine多币种策略警报</span></a><a class="item title" href="/2025/07/19/pine%E5%9B%BE%E4%B8%AD%E6%A0%87%E7%AD%BE%E5%88%B6%E4%BD%9C%E5%8F%8A%E7%BE%8E%E5%8C%96/"><span class="title">pine图中标签制作及美化</span></a><a class="item title" href="/2025/07/18/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5/"><span class="title">pine多指标选择策略</span></a><a class="item title" href="/2025/07/17/pine%E7%89%88%E6%9C%AC6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E6%94%AF%E6%8C%81%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/"><span class="title">pine版本6自定义函数支持命名参数传递</span></a><a class="item title" href="/2025/07/17/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E5%BB%BA%E7%AB%8B%E8%AD%A6%E6%8A%A5/"><span class="title">pine多指标建立警报</span></a><a class="item title" href="/2025/07/09/%E5%BC%80%E9%80%9A%E6%90%AC%E7%93%A6%E5%B7%A5%E7%A7%AF%E5%88%86/"><span class="title">开通搬瓦工积分</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-09-30T12:25:22.000Z">2024-09-30</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-08-15T12:40:04.878Z">2025-08-15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>PVE ct模板使用istoreos的旁路网关</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>OpenWRT常规img.gz转化为PVE LXC CT模版rootfs.tar.gz<br>以及简单LXC OP的安装与基本设置以旁路网关模式为例</p>
+<h1 id="转CT模板"><a href="#转CT模板" class="headerlink" title="转CT模板"></a>转CT模板</h1><p>下载img页面</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://fw.koolcenter.com/iStoreOS/x86_64_efi/</span><br></pre></td></tr></table></figure>
+
+<p>复制最新的去命令行下载</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://fw0.koolcenter.com/iStoreOS/x86_64_efi/istoreos-22.03.7-2024080210-x86-64-squashfs-combined-efi.img.gz</span><br><span class="line">gzip -d istoreos-22.03.7-2024080210-x86-64-squashfs-combined-efi.img.gz</span><br><span class="line">mv istoreos-22.03.7-2024080210-x86-64-squashfs-combined-efi.img istoreos.img</span><br><span class="line">mkdir /mnt/openwrt</span><br><span class="line">modprobe nbd #加载NBD模块使磁盘镜像可映射到本地使用</span><br><span class="line">qemu-nbd -c /dev/nbd0 -f raw istoreos.img</span><br></pre></td></tr></table></figure>
+
+<p>查看所挂载的分区<br><code>lsblk -f /dev/nbd0</code><br><img src="https://roim-picx-bpc.pages.dev/rest/rv4wkHK.png" alt="31.png"><br>4个分区。选择2号分区挂载</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/nbd0p2 /mnt/openwrt/ # 挂载指定镜像分区到指定文件夹</span><br></pre></td></tr></table></figure>
+
+<p>进入挂载的目录，查看文件<br><img src="https://roim-picx-bpc.pages.dev/rest/30owkHK.png" alt="32.png"><br>接下来就是打包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -czvf /var/lib/vz/template/cache/openwrt.rootfs.tar.gz *</span><br></pre></td></tr></table></figure>
+
+<p>打包完，卸载镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /mnt</span><br><span class="line">umount /mnt/openwrt</span><br><span class="line">qemu-nbd -d /dev/nbd0</span><br></pre></td></tr></table></figure>
+
+<h1 id="建立CT容器"><a href="#建立CT容器" class="headerlink" title="建立CT容器"></a>建立CT容器</h1><p>pve shell运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pct create 100 local:vztmpl/openwrt.rootfs.tar.gz --rootfs local-lvm:1 --ostype unmanaged --hostname Openwrt-LXC --arch amd64 --Cores 2 --memory 1024 --swap 0 -net0 bridge=vmbr0,name=eth0</span><br></pre></td></tr></table></figure>
+
+<p>创建2h1g的100号容器。</p>
+<h1 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h1><p>修改开机自启动<br><img src="https://roim-picx-bpc.pages.dev/rest/SLcALHK.png" alt="33.png"><br>修改conf</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/pve/lxc/100.conf</span><br></pre></td></tr></table></figure>
+
+<p>末尾添加2行代码，目的为了增加tun设备映射支持</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lxc.cgroup2/devices/allow: c 10:200 rwm</span><br><span class="line">lxc.mount.entry: /dev/net/tun /dev/net/tun none bind,create-file</span><br></pre></td></tr></table></figure>
+
+<p>保存退出。</p>
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><p>打开pve 容器点击控制台 开机。很快<br><img src="https://roim-picx-bpc.pages.dev/rest/flsaLHK.png" alt="34.png"><br>再回车<br>修改网络配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/config/network</span><br></pre></td></tr></table></figure>
+
+<p>修改lan字段如下<br><img src="https://roim-picx-bpc.pages.dev/rest/2P3BLHK.png" alt="35.png"><br>保存退出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service network restart</span><br></pre></td></tr></table></figure>
+
+<p>重启网络或者reboot重启</p>
+<h1 id="op初始化"><a href="#op初始化" class="headerlink" title="op初始化"></a>op初始化</h1><p>打开192.168.31.2登录，密码默认password</p>
+<ol>
+<li>初始化网络接口<br>点开左边网络-接口<br>编辑lan<br><img src="https://roim-picx-bpc.pages.dev/rest/trWbLHK.png" alt="36.png"><br>常规设置-ipv4网关填好 192.168.31.1<br><img src="https://roim-picx-bpc.pages.dev/rest/D0obLHK.png" alt="37.png"><br>目的是为了访问主路由</li>
+</ol>
+<p>高级设置-使用自定义的DNS服务器，填写 192.168.31.1和8.8.8.8</p>
+<p>（223.5.5.5和119.29.29.29</p>
+<p>目的是为了保证一些插件联网，添加阿里和腾讯的dns，避免主路由dhcp没有给他分配dns。）笔者没有使用两个云的dns。</p>
+<p>关闭op的dhcp：<br><img src="https://roim-picx-bpc.pages.dev/rest/AAH1LHK.png" alt="39.png"><br>选中 忽略此接口</p>
+<p>保存后</p>
+<p>再保存并应用，才能生效<br><img src="https://roim-picx-bpc.pages.dev/rest/KIT1LHK.png" alt="40.png"></p>
+<h1 id="bug"><a href="#bug" class="headerlink" title="bug"></a>bug</h1><p>如果发现op无法联网。</p>
+<p>shell修改&#x2F;etc&#x2F;resolv.conf</p>
+<ol>
+<li>备份<br>mv &#x2F;etc&#x2F;resolv.conf &#x2F;etc&#x2F;resolv.conf.bak</li>
+<li>自建conf<br>添加8.8.8.8到第一行保存</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/resolv.conf</span><br><span class="line">#添加以下内容</span><br><span class="line">nameserver 8.8.8.8</span><br><span class="line">nameserver 223.5.5.5</span><br></pre></td></tr></table></figure>
+
+<p>保存。返回浏览器就有网络了。</p>
+<p>因为这个文件有时候会被还原回去，又会断网，我们这样自建的文件权限不同，不会被更新</p>
+<ol start="3">
+<li>确认</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">root@Openwrt-LXC:/etc# ls -l /etc/resolv.conf*</span><br><span class="line">-rw-r--r--    1 root     root            40 Aug 15 23:46 /etc/resolv.conf</span><br><span class="line">lrwxrwxrwx    1 root     root            16 Jul 26 14:23 /etc/resolv.conf.bak -&gt; /tmp/resolv.conf</span><br><span class="line">root@Openwrt-LXC:/etc# cat /etc/resolv.conf</span><br><span class="line">nameserver 8.8.8.8</span><br><span class="line">nameserver 223.5.5.5</span><br><span class="line">root@Openwrt-LXC:/etc# cat /etc/resolv.conf.bak</span><br><span class="line">search lan</span><br><span class="line">nameserver 127.0.0.1</span><br><span class="line">nameserver ::1</span><br></pre></td></tr></table></figure>
+
+<p>如上&#x2F;etc&#x2F;resolv.conf.bak会被还原，修改了没用。</p>
+<p>暂时解决断网的dns问题。</p>
+<h1 id="学习"><a href="#学习" class="headerlink" title="学习"></a>学习</h1><h2 id="安装pw2（可跳过，笔者卸载了）"><a href="#安装pw2（可跳过，笔者卸载了）" class="headerlink" title="安装pw2（可跳过，笔者卸载了）"></a>安装pw2（可跳过，笔者卸载了）</h2><p>参考教程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/AUK9527/Are-u-ok/tree/main/x86</span><br></pre></td></tr></table></figure>
+
+<p>istoreos自带的istore没有自带passwall，去往github下载的Are-u-ok下载。</p>
+<p>选择x86_64平台</p>
+<p>下载passwall2</p>
+<p>这是一个run后缀的包，打开istore，选择手动安装</p>
+<p>选择run包，就会自动跳出命令行界面进行安装</p>
+<p>等待右上角原点变绿之后就安装完成</p>
+<h2 id="配置passwalll2（可跳过，笔者卸载了）"><a href="#配置passwalll2（可跳过，笔者卸载了）" class="headerlink" title="配置passwalll2（可跳过，笔者卸载了）"></a>配置passwalll2（可跳过，笔者卸载了）</h2><p>在istoreos后台的服务界面可以找到刚刚安装的passwall2<br><img src="https://roim-picx-bpc.pages.dev/rest/FdkClHK.png" alt="44.png"><br>选择节点订阅，选择添加</p>
+<p>在该页面中粘贴机场网址后,修改最下方ua为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36</span><br></pre></td></tr></table></figure>
+
+<p>点击保存并应用<br><img src="https://roim-picx-bpc.pages.dev/rest/grIkmHK.png" alt="45.png"></p>
+<p>测试</p>
+<p>pw2首页，开启开关，选择节点保存并应用，再点击测试百度谷歌github<br><img src="https://roim-picx-bpc.pages.dev/rest/lfWLmHK.png" alt="46.png"></p>
+<p>同时打开op命令行，测试，<br>百度可以，谷歌不行，github可以。</p>
+<p>可能面板检测百度有问题。</p>
+<p><strong>后续测试，其他设备使用op的网关科学上网，也出现百度打不开，勾了ip伪装，加了防火墙规则，关闭了无效数据包（本来也关闭）等等，实在没辙了，先换用openclash吧</strong></p>
+<h2 id="卸载pw2（可跳过）"><a href="#卸载pw2（可跳过）" class="headerlink" title="卸载pw2（可跳过）"></a>卸载pw2（可跳过）</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/istore/uci-defaults_bak</span><br><span class="line">ls #查看有的名字</span><br><span class="line">is-opkg remove &#x27;luci-i18n-passwall2-zh-cn&#x27;</span><br><span class="line">is-opkg remove &#x27;*passwall2*&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>回到浏览器面板，服务中已经没有pw2了</p>
+<h1 id="拥抱openclash"><a href="#拥抱openclash" class="headerlink" title="拥抱openclash"></a>拥抱openclash</h1><ol>
+<li>下载地址</li>
+</ol>
+<p><code>https://github.com/vernesong/OpenClash/releases</code></p>
+<p>luci-app-openclash_0.46.014-beta_all.ipk 下载备用</p>
+<ol start="2">
+<li>安装依赖包<br>进入软路由终端里复制下面的命令安装OpenClash需要的依赖包，可以一条条复制执行，也可以整个复制粘贴按回车执行</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#iptables</span><br><span class="line">opkg update</span><br><span class="line">opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ipset ip-full iptables-mod-tproxy iptables-mod-extra libcap libcap-bin ruby ruby-yaml kmod-tun kmod-inet-diag unzip luci-compat luci luci-base</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>安装OpenClash<br>进入软路由系统-&gt;系统-&gt;软件包-&gt;上传软件包，选择步骤1下载的软件包，点击上传。</li>
+</ol>
+<h1 id="配置OpenClash"><a href="#配置OpenClash" class="headerlink" title="配置OpenClash"></a>配置OpenClash</h1><ol>
+<li>设置fake-ip模式<br>进入软路由系统-&gt;服务-&gt;OpenClash-插件设置</li>
+</ol>
+<p>点击中间下方 切换faka-ip模式后</p>
+<p>选中 使用meta内核 保存应用<br><img src="https://roim-picx-bpc.pages.dev/rest/vkiZPHK.png" alt="51.png"></p>
+<ol start="2">
+<li>更新版本内核<br>进入OpenClash-&gt;插件设置-&gt;版本更新，点击一键检查更新<br><img src="https://roim-picx-bpc.pages.dev/rest/6eCzPHK.png" alt="52.png"></li>
+<li>开启GEO数据库订阅<br>进入OpenClash-&gt;插件设置-&gt;GEO数据库订阅 保存-应用<br><img src="https://roim-picx-bpc.pages.dev/rest/B7azPHK.png" alt="53.png"></li>
+<li>切换(更新)Dashboard版本<br>进入OpenClash-&gt;插件设置-&gt;外部控制</li>
+</ol>
+<p>切换前<br><img src="https://roim-picx-bpc.pages.dev/rest/y4HzPHK.png" alt="54.png"></p>
+<p>切换后<br><img src="https://roim-picx-bpc.pages.dev/rest/SELzPHK.png" alt="55.png"><br>保存 应用</p>
+<ol start="5">
+<li>修改github地址<br>进入OpenClash-&gt;覆写设置-&gt;常规设置<br><img src="https://roim-picx-bpc.pages.dev/rest/0mZzPHK.png" alt="56.png"><br>保存-应用</li>
+<li>配置订阅<br>进入OpenClash-&gt;配置订阅</li>
+</ol>
+<p>-&gt;新增<br><img src="https://roim-picx-bpc.pages.dev/rest/O4HapHK.png" alt="57.png"><br>如上图，添加订阅地址，然后下面的选项修改后，保存配置。</p>
+<p>再点击更新配置。</p>
+<h1 id="订阅bug"><a href="#订阅bug" class="headerlink" title="订阅bug"></a>订阅bug</h1><p>首页启动一直失败 测试配置失败</p>
+<p>查看运行日志<br><img src="https://roim-picx-bpc.pages.dev/rest/XrqhpHK.png" alt="65.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/SXxHpHK.png" alt="63.png"><br>报错找不到proxy</p>
+<p>参考网友报错反馈</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/vernesong/OpenClash/issues/874</span><br></pre></td></tr></table></figure>
+
+<p>排查问题<br><img src="https://roim-picx-bpc.pages.dev/rest/QEphpHK.png" alt="64.png"><br>配置管理页面查看配置（和修改</p>
+<p>对比本地clashverge软件订阅的信息<br><img src="https://roim-picx-bpc.pages.dev/rest/NcBhpHK.png" alt="62.png"><br>我们发现实际是面板的配置没有获取全，proxy和group没有信息。<br>复制两个部分替换回去，然后保存更新</p>
+<p>回到首页启动，完美启动<br><img src="https://roim-picx-bpc.pages.dev/rest/Nz37pHK.png" alt="66.png"></p>
+<ol start="7">
+<li>添加规则，设置指定域名不走代理<br>进入OpenClash-&gt;覆写设置-&gt;规则设置</li>
+</ol>
+<p>开启自定义规则<br><img src="https://roim-picx-bpc.pages.dev/rest/c2B0pHK.png" alt="58.png"><br>填写规则</p>
+<p>比如我要将baidu.com加入规则，并让他不走代理。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- DOMAIN-SUFFIX,baidu.com,DIRECT</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://roim-picx-bpc.pages.dev/rest/88M0pHK.png" alt="59.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">规则有很多种：</span><br><span class="line">##- SCRIPT,quic,REJECT #shortcuts rule</span><br><span class="line">##- SCRIPT,time-limit,REJECT #shortcuts rule</span><br><span class="line">##- PROCESS-NAME,curl,DIRECT #匹配路由自身进程(curl直连)</span><br><span class="line">##- DOMAIN-SUFFIX,google.com,Proxy #匹配域名后缀(交由Proxy代理服务器组)</span><br><span class="line">##- DOMAIN-KEYWORD,google,Proxy #匹配域名关键字(交由Proxy代理服务器组)</span><br><span class="line">##- DOMAIN,google.com,Proxy #匹配域名(交由Proxy代理服务器组)</span><br><span class="line">##- DOMAIN-SUFFIX,ad.com,REJECT #匹配域名后缀(拒绝)</span><br><span class="line">##- IP-CIDR,127.0.0.0/8,DIRECT #匹配数据目标IP(直连)</span><br><span class="line">##- SRC-IP-CIDR,192.168.1.201/32,DIRECT #匹配数据发起IP(直连)</span><br><span class="line">##- DST-PORT,80,DIRECT #匹配数据目标端口(直连)</span><br><span class="line">##- SRC-PORT,7777,DIRECT #匹配数据源端口(直连)</span><br><span class="line">但主要用到的是域名或者关键字</span><br><span class="line">##- DOMAIN-SUFFIX,google.com,Proxy #匹配域名后缀(交由Proxy代理服务器组)</span><br><span class="line">##- DOMAIN-KEYWORD,google,Proxy #匹配域名关键字(交由Proxy代理服务器组)</span><br><span class="line">Proxy代表要代理</span><br><span class="line">DIRECT代表不走代理</span><br><span class="line">REJECT代表拒绝</span><br><span class="line">根据自己的需求来配置规则</span><br></pre></td></tr></table></figure>
+
+<p>保存-应用（在最下方）</p>
+<p>查看规则是否生效</p>
+<p>运行状态-YACD控制面板-规则，可以查看上面设置的规则<br><img src="https://roim-picx-bpc.pages.dev/rest/U537pHK.png" alt="67.png"></p>
+<h1 id="试试旁路网关"><a href="#试试旁路网关" class="headerlink" title="试试旁路网关"></a>试试旁路网关</h1><p>有两种办法，一种是在设备上手动设置网关为软路由的IP地址，另一种是在主路由上面把 DHCP 默认网关设置为软路由的 IP。为了稳定，我用手动配置的办法。</p>
+<ol>
+<li>先测试没有修改，自动dhcp<br><img src="https://roim-picx-bpc.pages.dev/rest/FkFSKHK.png" alt="28.png"><br>可以看到，直接回到主路由31.1访问</li>
+<li>修改网关和dns给旁路网关<br><img src="https://roim-picx-bpc.pages.dev/rest/DhlSKHK.png" alt="29.png"></li>
+<li>测试效果<br><img src="https://roim-picx-bpc.pages.dev/rest/AWtsKHK.png" alt="30.png"><br>可以看到第一跳、第二跳、第三跳分别是旁路网关、我的硬路由和光猫，然后是联通的网络，最后到达目标地址。</li>
+</ol>
+<h1 id="一些问题备忘录"><a href="#一些问题备忘录" class="headerlink" title="一些问题备忘录"></a>一些问题备忘录</h1><ol>
+<li>国内网站访问速度变慢了？<br>关掉本地dns劫持</li>
+</ol>
+<p>打开面板<br><img src="https://roim-picx-bpc.pages.dev/rest/XjbsQHK.png" alt="69.png"></p>
+<p>可以自己感觉下速度。</p>
+<ol start="2">
+<li>pt偷偷跑了旁路流量<br>原因<br><img src="https://roim-picx-bpc.pages.dev/rest/b4HU1hK.png" alt="19.png"></li>
+</ol>
+<p>所以将fake-ip切换回redir-host模式</p>
+<p>再到流量控制屏蔽非常用端口的流量。<br><img src="https://roim-picx-bpc.pages.dev/rest/cCgU1hK.png" alt="20.png"></p>
+<ol start="2">
+<li>有的国内网站打不开</li>
+</ol>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2024/09/30/PVE%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%86%85portainer%E5%AE%89%E8%A3%85Transmission/">PVE虚拟机内portainer安装Transmission</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2024/09/30/PVE%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%86%85portainer%E5%AE%89%E8%A3%85qBittorrent/">PVE虚拟机内portainer安装qBittorrent</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BD%ACCT%E6%A8%A1%E6%9D%BF"><span class="toc-text">转CT模板</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8BCT%E5%AE%B9%E5%99%A8"><span class="toc-text">建立CT容器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE"><span class="toc-text">设置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#op%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">op初始化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#bug"><span class="toc-text">bug</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%A6%E4%B9%A0"><span class="toc-text">学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85pw2%EF%BC%88%E5%8F%AF%E8%B7%B3%E8%BF%87%EF%BC%8C%E7%AC%94%E8%80%85%E5%8D%B8%E8%BD%BD%E4%BA%86%EF%BC%89"><span class="toc-text">安装pw2（可跳过，笔者卸载了）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEpasswalll2%EF%BC%88%E5%8F%AF%E8%B7%B3%E8%BF%87%EF%BC%8C%E7%AC%94%E8%80%85%E5%8D%B8%E8%BD%BD%E4%BA%86%EF%BC%89"><span class="toc-text">配置passwalll2（可跳过，笔者卸载了）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BDpw2%EF%BC%88%E5%8F%AF%E8%B7%B3%E8%BF%87%EF%BC%89"><span class="toc-text">卸载pw2（可跳过）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8B%A5%E6%8A%B1openclash"><span class="toc-text">拥抱openclash</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEOpenClash"><span class="toc-text">配置OpenClash</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A2%E9%98%85bug"><span class="toc-text">订阅bug</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%95%E8%AF%95%E6%97%81%E8%B7%AF%E7%BD%91%E5%85%B3"><span class="toc-text">试试旁路网关</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98%E5%A4%87%E5%BF%98%E5%BD%95"><span class="toc-text">一些问题备忘录</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

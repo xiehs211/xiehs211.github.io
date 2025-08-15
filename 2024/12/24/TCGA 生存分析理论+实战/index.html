@@ -1,0 +1,898 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>TCGA 生存分析理论+实战 - Hexo</title>
+
+  
+    <meta name="description" content="一、生存分析的基本概念 生存时间：从规定的观察起点至事件终点出现所经历的时间长度。 生存数据：① 完全数据：准确的生存时间；② 删失数据&#x2F;截尾数据：由于某种原因无法观察到事件终点出现的数据。  删失数据的原因包括：1）研究结束时终点事件未发生；2）失访；3）研究对象因其他原因死亡或无法耐受而终止观察。  如上图所示：1号和5号 观察期间内患者死亡，为完全数据；2号在观察结束后死亡、3号失">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCGA 生存分析理论+实战">
+<meta property="og:url" content="http://example.com/2024/12/24/TCGA%20%E7%94%9F%E5%AD%98%E5%88%86%E6%9E%90%E7%90%86%E8%AE%BA+%E5%AE%9E%E6%88%98/">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、生存分析的基本概念 生存时间：从规定的观察起点至事件终点出现所经历的时间长度。 生存数据：① 完全数据：准确的生存时间；② 删失数据&#x2F;截尾数据：由于某种原因无法观察到事件终点出现的数据。  删失数据的原因包括：1）研究结束时终点事件未发生；2）失访；3）研究对象因其他原因死亡或无法耐受而终止观察。  如上图所示：1号和5号 观察期间内患者死亡，为完全数据；2号在观察结束后死亡、3号失">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/aC9xslK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/xICrulK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/5q7rulK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/1KXrulK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/ltcSulK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/9aJSulK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/R3vUulK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/i3YUulK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/iPYUulK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/xsEuulK.png">
+<meta property="article:published_time" content="2024-12-24T12:25:22.000Z">
+<meta property="article:modified_time" content="2025-08-15T13:27:50.333Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://roim-picx-bpc.pages.dev/rest/aC9xslK.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2024-12-24T20:25:22+08:00","dateModified":"2025-08-15T21:27:50+08:00","datePublished":"2024-12-24T20:25:22+08:00","description":"","headline":"TCGA 生存分析理论+实战","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/12/24/TCGA%20%E7%94%9F%E5%AD%98%E5%88%86%E6%9E%90%E7%90%86%E8%AE%BA+%E5%AE%9E%E6%88%98/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2024/12/24/TCGA%20%E7%94%9F%E5%AD%98%E5%88%86%E6%9E%90%E7%90%86%E8%AE%BA+%E5%AE%9E%E6%88%98/","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/08/11/%E5%AE%9D%E5%A1%94%E9%83%A8%E7%BD%B2message-pusher/"><span class="title">宝塔部署message-pusher</span></a><a class="item title" href="/2025/07/27/pine%E7%89%88%E6%9C%AC5%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%89%88%E6%9C%AC6%E5%90%8E%EF%BC%8C%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7%E5%8F%98%E5%A4%9A%E4%BA%86%EF%BC%9F/"><span class="title">pine版本5转换为版本6后，交易信号变多了？</span></a><a class="item title" href="/2025/07/21/pine%20%E7%AD%96%E7%95%A5%E4%BA%A4%E6%98%93%E6%98%BE%E7%A4%BAlabel/"><span class="title">pine 策略交易显示label</span></a><a class="item title" href="/2025/07/20/pine%E6%9B%BF%E4%BB%A3ifelse%E7%9A%84switch%E8%AF%AD%E6%B3%95/"><span class="title">pine替代ifelse的switch语法</span></a><a class="item title" href="/2025/07/20/pine%E5%A4%9A%E5%B8%81%E7%A7%8D%E7%AD%96%E7%95%A5%E8%AD%A6%E6%8A%A5/"><span class="title">pine多币种策略警报</span></a><a class="item title" href="/2025/07/19/pine%E5%9B%BE%E4%B8%AD%E6%A0%87%E7%AD%BE%E5%88%B6%E4%BD%9C%E5%8F%8A%E7%BE%8E%E5%8C%96/"><span class="title">pine图中标签制作及美化</span></a><a class="item title" href="/2025/07/18/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5/"><span class="title">pine多指标选择策略</span></a><a class="item title" href="/2025/07/17/pine%E7%89%88%E6%9C%AC6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E6%94%AF%E6%8C%81%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/"><span class="title">pine版本6自定义函数支持命名参数传递</span></a><a class="item title" href="/2025/07/17/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E5%BB%BA%E7%AB%8B%E8%AD%A6%E6%8A%A5/"><span class="title">pine多指标建立警报</span></a><a class="item title" href="/2025/07/09/%E5%BC%80%E9%80%9A%E6%90%AC%E7%93%A6%E5%B7%A5%E7%A7%AF%E5%88%86/"><span class="title">开通搬瓦工积分</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-12-24T12:25:22.000Z">2024-12-24</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-08-15T13:27:50.333Z">2025-08-15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>TCGA 生存分析理论+实战</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="一、生存分析的基本概念"><a href="#一、生存分析的基本概念" class="headerlink" title="一、生存分析的基本概念"></a>一、生存分析的基本概念</h1><ol>
+<li>生存时间：从规定的观察起点至事件终点出现所经历的时间长度。</li>
+<li>生存数据：① 完全数据：准确的生存时间；② 删失数据&#x2F;截尾数据：由于某种原因无法观察到事件终点出现的数据。</li>
+</ol>
+<p>删失数据的原因包括：1）研究结束时终点事件未发生；2）失访；3）研究对象因其他原因死亡或无法耐受而终止观察。</p>
+<p><img src="https://roim-picx-bpc.pages.dev/rest/aC9xslK.png"></p>
+<p>如上图所示：1号和5号 观察期间内患者死亡，为完全数据；<br>2号在观察结束后死亡、3号失访、4号始终未观察到终点事件，这3个数据为删失数据。</p>
+<h1 id="二、-生存分析的常用指标"><a href="#二、-生存分析的常用指标" class="headerlink" title="二、 生存分析的常用指标"></a>二、 生存分析的常用指标</h1><ol>
+<li>中位生存期（Median survival time）：50%个体存活的时间。</li>
+<li>生存函数（Survival function）：某时刻观察对象仍然存活的概率，与时间相关，又称积累生存率。</li>
+<li>风险函数（Hazard function） ：某时刻观察对象的瞬时死亡率。</li>
+</ol>
+<h1 id="三、Kaplan-Meier-生存曲线"><a href="#三、Kaplan-Meier-生存曲线" class="headerlink" title="三、Kaplan-Meier 生存曲线"></a>三、Kaplan-Meier 生存曲线</h1><p>Kaplan-Meier法，即计算的是上述概念所提到的积累生存率，是一种单因素生存分析方法，可用于研究1个因素对于生存时间的影响。<br><img src="https://roim-picx-bpc.pages.dev/rest/xICrulK.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/5q7rulK.png"><br>如上图所示：</p>
+<p>曲线上的“+”表示删失数据；</p>
+<p>曲线越高、下降越平缓表示生存率越高或预后越好；</p>
+<p>曲线越低、下降越陡峭表示生存率越低或预后不佳；</p>
+<p>蓝色圈表示中位生存期，肿瘤直径&gt;5cm组中位生存期约23月，≤2cm组约45月；</p>
+<h1 id="四、生存率的比较"><a href="#四、生存率的比较" class="headerlink" title="四、生存率的比较"></a>四、生存率的比较</h1><ol>
+<li>单因素分析方法检验</li>
+</ol>
+<p>非参数检验方法使用较为广泛，主要包括log-rank检验和Breslow检验，二者都属于卡方检验。</p>
+<p>log-rank检验给组间死亡的远期差别更大，即log-rank方法对远期差异敏感。</p>
+<p>Breslow检验给组间死亡的近期差别更大，即Breslow方法对近期差异敏感。</p>
+<p>当生存曲线有交叉时，提示具有混杂因素的影响，这两种检验方法不适用。此时可以考虑R语言TSHRC包的Two-Stage方法进行检验，可以同时计算Kaplan-Meier和log-rank test的p值。</p>
+<ol start="2">
+<li>多因素Cox回归模型检验</li>
+</ol>
+<p>（1）cox回归模型的基本表达式：<br><img src="https://roim-picx-bpc.pages.dev/rest/1KXrulK.png" alt="3.png"><br>h(t)即风险函数，指在t时刻观察对象的瞬时死亡率；</p>
+<p>X1<del>m是自变量，β1</del>m是对应X的回归系数；</p>
+<p>因此风险函数展示了多个自变量X对因变量h(t)的影响。</p>
+<p>回归系数 β 与 HR (Hazard Ratio) 有对应关系，经过对数转换，自变量X取特殊值：X&#x3D;0表示未暴露组，X&#x3D;1表示暴露组，风险函数可以改写为<br><img src="https://roim-picx-bpc.pages.dev/rest/ltcSulK.png" alt="4.png"><br>（2）风险比（HR, Hazard Ratio）</p>
+<p>【举例】分析乳腺癌术后复发时间与是否化疗有关。X&#x3D;0表示患者未接受化疗，X&#x3D;1表示患者接受化疗，经过分析X的回归系数β&#x3D; -0.38。故HR如下：<br><img src="https://roim-picx-bpc.pages.dev/rest/9aJSulK.png" alt="5.png"><br>提示接受化疗的乳癌术后患者复发的风险为不接受化疗患者的0.68倍。</p>
+<h1 id="五、生存曲线绘制及假设检验"><a href="#五、生存曲线绘制及假设检验" class="headerlink" title="五、生存曲线绘制及假设检验"></a>五、生存曲线绘制及假设检验</h1><p>前文所述，对生存分析的基本概念和方法有了基本的认识，现在可以结合之前整理的tcga临床数据来进行生存曲线的绘制。</p>
+<p>生存曲线绘制的代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">rm(list = ls())  ####  魔幻操作，一键清空~</span><br><span class="line">getwd()</span><br><span class="line">setwd(&#x27;C:/Users/Administrator/project_gdc2&#x27;)</span><br><span class="line"># 加载包，准备绘制KM生存曲线</span><br><span class="line">library(survival)</span><br><span class="line">library(survminer)</span><br><span class="line">library(dplyr)</span><br><span class="line">library(ggplot2)</span><br><span class="line">options(datatable.fread.datatable=FALSE)#保证fread返回数据框</span><br><span class="line">df &lt;- fread(&#x27;./RawData/03.LIHC_clin.txt&#x27;)</span><br><span class="line">class(df)</span><br><span class="line">colnames(df)</span><br><span class="line"></span><br><span class="line"># 对患者进行分组</span><br><span class="line">a &lt;- select(df,c(&quot;month&quot;,&quot;Race&quot;,&quot;Gender&quot;,&quot;Status&quot;,&quot;Stage&quot;,&quot;Age&quot;,&quot;OS&quot;)) # 提取分析需要的列</span><br><span class="line"></span><br><span class="line"># survdata = Surv(time = month, event = Status ==&#x27;Dead&#x27;) # 存储生存数据</span><br><span class="line">a$Age &lt;- factor(cut(a$Age,breaks=c(-Inf,median(a$Age),Inf),</span><br><span class="line">                    labels = c(&quot;Young&quot;,&quot;Old&quot;))) # 按中位年龄对患者进行分层</span><br><span class="line">sfit &lt;- survfit(Surv(time = month, event = Status == &#x27;Dead&#x27;) ~ Age, data = a)</span><br><span class="line">sfit</span><br><span class="line"></span><br><span class="line"># 进行假设检验</span><br><span class="line"># 两组间的检验可以使用survdiff函数</span><br><span class="line">data.survdiff &lt;- survdiff(Surv(time = month, event = Status ==&#x27;Dead&#x27;) ~ Age,data = a)</span><br><span class="line">data.survdiff</span><br><span class="line"></span><br><span class="line"># 计算P值</span><br><span class="line">p.val = 1 - pchisq(data.survdiff$chisq, length(data.survdiff$n) - 1) </span><br><span class="line">p.val</span><br><span class="line"></span><br><span class="line"># 分组多可以使用pairwise_survdiff函数进行两两检验</span><br><span class="line"># data.survdiff2 &lt;- pairwise_survdiff(Surv(month,Status)~Race,data = a)</span><br><span class="line"># data.survdiff2</span><br><span class="line"># data.survdiff2$p.value</span><br></pre></td></tr></table></figure>
+
+<p>绘制简单的生存曲线：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">plot1 &lt;- ggsurvplot(sfit, data = a)</span><br><span class="line">plot1</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://roim-picx-bpc.pages.dev/rest/R3vUulK.png" alt="6.png"><br>优化生存曲线，添加p值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">plot2 &lt;- ggsurvplot(sfit,</span><br><span class="line">           data = a,</span><br><span class="line">           pval = T)</span><br><span class="line">plot2</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://roim-picx-bpc.pages.dev/rest/i3YUulK.png" alt="7.png"><br>可以看到按中位年龄分组，两组的生存率没有明显的统计学差异，p&#x3D;0.26</p>
+<p>进一步优化生存曲线，添加95%置信区间、风险表等，让图更加美观！</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">plot3 &lt;- ggsurvplot(sfit, # 创建的拟合对象</span><br><span class="line">           data = a,  # 指定变量数据来源</span><br><span class="line">           conf.int = TRUE, # 显示置信区间</span><br><span class="line">           pval = TRUE, # 添加P值</span><br><span class="line">           surv.median.line = &quot;hv&quot;,  # 添加中位生存时间线</span><br><span class="line">           risk.table = TRUE, # 添加风险表</span><br><span class="line">           risk.table.height=.25,</span><br><span class="line">           xlab = &quot;Time in months&quot;,</span><br><span class="line">           ylab = &quot;Overall Survival Probability&quot;,</span><br><span class="line">           legend = c(0.8,0.75), # 指定图例位置</span><br><span class="line">           legend.title = &quot;Age&quot;, # 设置图例标题“Age”</span><br><span class="line">           legend.labs = c(&quot;Young&quot;,&quot;Old&quot;), # 指定图例分组标签</span><br><span class="line">           break.x.by = 20,  # 设置x轴刻度间距</span><br><span class="line">           palette = &quot;hue&quot;)  # 默认为hue，可以自定义调色板 &quot;grey&quot;,&quot;npg&quot;,&quot;aaas&quot;,&quot;lancet&quot;,&quot;jco&quot;, &quot;ucscgb&quot;,&quot;uchicago&quot;,&quot;simpsons&quot;和&quot;rickandmorty&quot;</span><br><span class="line">plot3</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://roim-picx-bpc.pages.dev/rest/iPYUulK.png" alt="8.png"><br>还可以添加总生存曲线：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">plot4 &lt;- ggsurvplot(sfit, # 创建的拟合对象</span><br><span class="line">           data = a,  # 指定变量数据来源</span><br><span class="line">           conf.int = TRUE, # 显示置信区间</span><br><span class="line">           pval = TRUE, # 添加P值</span><br><span class="line">           surv.median.line = &quot;hv&quot;,  # 添加中位生存时间线</span><br><span class="line">           risk.table = TRUE, # 添加风险表</span><br><span class="line">           risk.table.height=.25,</span><br><span class="line">           xlab = &quot;Time in months&quot;,</span><br><span class="line">           ylab = &quot;Overall Survival Probability&quot;,</span><br><span class="line">           legend = c(0.8,0.75), # 指定图例位置</span><br><span class="line">           legend.title = &quot;Age&quot;, # 设置图例标题为“Age”</span><br><span class="line">           legend.labs = c(&quot;All&quot;,&quot;Young&quot;,&quot;Old&quot;), # 指定图例分组标签</span><br><span class="line">           break.x.by = 20,  # 设置x轴刻度间距</span><br><span class="line">           palette = &quot;hue&quot;,  # 默认为hue，可以自定义调色板 &quot;grey&quot;,&quot;npg&quot;,&quot;aaas&quot;,&quot;lancet&quot;,&quot;jco&quot;, &quot;ucscgb&quot;,&quot;uchicago&quot;,&quot;simpsons&quot;和&quot;rickandmorty&quot;</span><br><span class="line">           add.all = TRUE) # 添加总患者生存曲线</span><br><span class="line">plot4</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://roim-picx-bpc.pages.dev/rest/xsEuulK.png" alt="9.png"></p>
+<h1 id="六、Cox回归分析"><a href="#六、Cox回归分析" class="headerlink" title="六、Cox回归分析"></a>六、Cox回归分析</h1><p>接下来我们利用cox模型计算HR</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">### cox回归分析计算HR</span><br><span class="line">b &lt;- select(df,c(&quot;month&quot;,&quot;Race&quot;,&quot;Gender&quot;,&quot;Status&quot;,&quot;Stage&quot;,&quot;Age&quot;,&quot;OS&quot;))</span><br><span class="line">res.cox &lt;- coxph(Surv(time = month, event = Status == &#x27;Dead&#x27;) ~ Age, data = b)</span><br><span class="line">coxSummary &lt;- summary(res.cox)</span><br><span class="line">coxSummary</span><br></pre></td></tr></table></figure>
+
+<p>结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&gt; coxSummary</span><br><span class="line">Call:</span><br><span class="line">coxph(formula = Surv(time = month, event = Status == &quot;Dead&quot;) ~ </span><br><span class="line">    Age, data = b)</span><br><span class="line"></span><br><span class="line">  n= 422, number of events= 164 </span><br><span class="line"></span><br><span class="line">        coef exp(coef) se(coef)     z Pr(&gt;|z|)</span><br><span class="line">Age 0.008939  1.008979 0.006062 1.475     0.14</span><br><span class="line"></span><br><span class="line">    exp(coef) exp(-coef) lower .95 upper .95</span><br><span class="line">Age     1.009     0.9911    0.9971     1.021</span><br><span class="line"></span><br><span class="line">Concordance= 0.524  (se = 0.026 )</span><br><span class="line">Likelihood ratio test= 2.25  on 1 df,   p=0.1</span><br><span class="line">Wald test            = 2.17  on 1 df,   p=0.1</span><br><span class="line">Score (logrank) test = 2.18  on 1 df,   p=0.1</span><br></pre></td></tr></table></figure>
+
+<p>cox分析结果：HR&#x3D;1.009（1.003-1.015），似然比检验和Wald检验p均大于0.05。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2024/12/25/%E6%AC%A7%E6%98%93OKX%20%E5%AE%89%E5%8D%93Android%20%E6%B3%A8%E5%86%8C_%E5%AE%89%E8%A3%85_%E5%AE%9E%E5%90%8D_%E4%B9%B0%E5%B8%81_%E8%BD%AC%E8%B4%A6%E7%AD%89%20%E6%96%B0%E6%89%8B%E8%B6%85%E8%AF%A6%E7%BB%86%E6%95%99%E7%A8%8B/">欧易OKX 安卓Android 注册_安装_实名_买币_转账等 新手超详细教程</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2024/12/24/RNA-Seq%E7%AE%80%E4%BB%8B%E5%8F%8ATPM%E4%BB%8B%E7%BB%8D/">RNA-Seq简介及TPM介绍</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%94%9F%E5%AD%98%E5%88%86%E6%9E%90%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">一、生存分析的基本概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81-%E7%94%9F%E5%AD%98%E5%88%86%E6%9E%90%E7%9A%84%E5%B8%B8%E7%94%A8%E6%8C%87%E6%A0%87"><span class="toc-text">二、 生存分析的常用指标</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Kaplan-Meier-%E7%94%9F%E5%AD%98%E6%9B%B2%E7%BA%BF"><span class="toc-text">三、Kaplan-Meier 生存曲线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%94%9F%E5%AD%98%E7%8E%87%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-text">四、生存率的比较</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%94%9F%E5%AD%98%E6%9B%B2%E7%BA%BF%E7%BB%98%E5%88%B6%E5%8F%8A%E5%81%87%E8%AE%BE%E6%A3%80%E9%AA%8C"><span class="toc-text">五、生存曲线绘制及假设检验</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81Cox%E5%9B%9E%E5%BD%92%E5%88%86%E6%9E%90"><span class="toc-text">六、Cox回归分析</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

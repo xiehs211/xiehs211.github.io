@@ -1,0 +1,877 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>初识 GitHub_Gitea Actions 流程自动化 - Hexo</title>
+
+  
+    <meta name="description" content="背景几年前开始，为了将自己的杂七杂八的代码托管起来，自己建了代码私服，当时综合调研了下选择了比较轻量的Gitea，一是防止github、gitee、coding等产品托管的代码审查，二是为了应对墙，不然推送代码真吃力，三是自己管理代码还是简单的压缩，出现了多个版本的压缩包，重复又难看。 前段时间 Gitea 发布了1.22.0版本，Gitea Actions成为了内置的CI&#x2F;CD解决方案">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初识 GitHub_Gitea Actions 流程自动化">
+<meta property="og:url" content="http://example.com/2025/02/17/%E5%88%9D%E8%AF%86%20GitHub_Gitea%20Actions%20%E6%B5%81%E7%A8%8B%E8%87%AA%E5%8A%A8%E5%8C%96/">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景几年前开始，为了将自己的杂七杂八的代码托管起来，自己建了代码私服，当时综合调研了下选择了比较轻量的Gitea，一是防止github、gitee、coding等产品托管的代码审查，二是为了应对墙，不然推送代码真吃力，三是自己管理代码还是简单的压缩，出现了多个版本的压缩包，重复又难看。 前段时间 Gitea 发布了1.22.0版本，Gitea Actions成为了内置的CI&#x2F;CD解决方案">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/vhy1aoK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/g3bCaoK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/eYw1aoK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/p7KKaoK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/GrFvaoK.png">
+<meta property="article:published_time" content="2025-02-17T12:25:22.000Z">
+<meta property="article:modified_time" content="2025-08-15T13:38:38.503Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://roim-picx-bpc.pages.dev/rest/vhy1aoK.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2025-02-17T20:25:22+08:00","dateModified":"2025-08-15T21:38:38+08:00","datePublished":"2025-02-17T20:25:22+08:00","description":"","headline":"初识 GitHub_Gitea Actions 流程自动化","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/02/17/%E5%88%9D%E8%AF%86%20GitHub_Gitea%20Actions%20%E6%B5%81%E7%A8%8B%E8%87%AA%E5%8A%A8%E5%8C%96/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2025/02/17/%E5%88%9D%E8%AF%86%20GitHub_Gitea%20Actions%20%E6%B5%81%E7%A8%8B%E8%87%AA%E5%8A%A8%E5%8C%96/","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/08/11/%E5%AE%9D%E5%A1%94%E9%83%A8%E7%BD%B2message-pusher/"><span class="title">宝塔部署message-pusher</span></a><a class="item title" href="/2025/07/27/pine%E7%89%88%E6%9C%AC5%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%89%88%E6%9C%AC6%E5%90%8E%EF%BC%8C%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7%E5%8F%98%E5%A4%9A%E4%BA%86%EF%BC%9F/"><span class="title">pine版本5转换为版本6后，交易信号变多了？</span></a><a class="item title" href="/2025/07/21/pine%20%E7%AD%96%E7%95%A5%E4%BA%A4%E6%98%93%E6%98%BE%E7%A4%BAlabel/"><span class="title">pine 策略交易显示label</span></a><a class="item title" href="/2025/07/20/pine%E6%9B%BF%E4%BB%A3ifelse%E7%9A%84switch%E8%AF%AD%E6%B3%95/"><span class="title">pine替代ifelse的switch语法</span></a><a class="item title" href="/2025/07/20/pine%E5%A4%9A%E5%B8%81%E7%A7%8D%E7%AD%96%E7%95%A5%E8%AD%A6%E6%8A%A5/"><span class="title">pine多币种策略警报</span></a><a class="item title" href="/2025/07/19/pine%E5%9B%BE%E4%B8%AD%E6%A0%87%E7%AD%BE%E5%88%B6%E4%BD%9C%E5%8F%8A%E7%BE%8E%E5%8C%96/"><span class="title">pine图中标签制作及美化</span></a><a class="item title" href="/2025/07/18/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5/"><span class="title">pine多指标选择策略</span></a><a class="item title" href="/2025/07/17/pine%E7%89%88%E6%9C%AC6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E6%94%AF%E6%8C%81%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/"><span class="title">pine版本6自定义函数支持命名参数传递</span></a><a class="item title" href="/2025/07/17/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E5%BB%BA%E7%AB%8B%E8%AD%A6%E6%8A%A5/"><span class="title">pine多指标建立警报</span></a><a class="item title" href="/2025/07/09/%E5%BC%80%E9%80%9A%E6%90%AC%E7%93%A6%E5%B7%A5%E7%A7%AF%E5%88%86/"><span class="title">开通搬瓦工积分</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2025-02-17T12:25:22.000Z">2025-02-17</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-08-15T13:38:38.503Z">2025-08-15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>初识 GitHub_Gitea Actions 流程自动化</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>几年前开始，为了将自己的杂七杂八的代码托管起来，自己建了代码私服，当时综合调研了下选择了比较轻量的Gitea，一是防止github、gitee、coding等产品托管的代码审查，二是为了应对墙，不然推送代码真吃力，三是自己管理代码还是简单的压缩，出现了多个版本的压缩包，重复又难看。</p>
+<p>前段时间 Gitea 发布了1.22.0版本，Gitea Actions成为了内置的CI&#x2F;CD解决方案已经有一段时间了，所以打算慢慢迁移到Gitea Actions，这样可以统一维护，再加上Drone被收购后产品路线也发生了一些变化，所以打算迁了。（目前docker安装的1.23.3）</p>
+<p>尽管Gitea Actions旨在与GitHub Actions兼容，但它们之间存在一些差异，但是Gitea Actions目前没有什么详情的语法文档，所以本文主要通过学习Github Actions，差异可以根据Gitea 文档进行微调，一下掌握两个平台的使用，当然也可以举一反三应用到其他CI&#x2F;CD平台，只是编写yml语法不同，原理都是大差不差。</p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>GitHub Actions 是一种持续集成和持续交付 (CI&#x2F;CD) 平台，可用于自动执行生成、测试和部署管道。 您可以创建工作流程来构建和测试存储库的每个拉取请求，或将合并的拉取请求部署到生产环境。</p>
+<p>GitHub Actions 不仅仅是 DevOps，还允许您在存储库中发生其他事件时运行工作流程。 例如，您可以运行工作流程，以便在有人在您的存储库中创建新问题时自动添加相应的标签。</p>
+<p>GitHub 提供 Linux、Windows 和 macOS 虚拟机来运行工作流程，或者您可以在自己的数据中心或云基础架构中托管自己的自托管运行器。</p>
+<p>Gitea 也是如此，只是Gitea Runner需要自己注册，可以根据自己手里的机器直接注册。</p>
+<p>大白话讲：就是当你的代码仓库发送某种变化时，你要触发某种工作流，然后进行编排自动执行。举个栗子：当你推送代码到仓库后，需要验证多个平台是否都能正常编译运行，都通过之后就发布到内部测试环境供测试人员进行测试，如果没有通过就不执行发布流程等等，这样就可以从传统开发本地打包再手动部署服务器上，然后启停服务，再验证服务是否正常这么复杂的流程。</p>
+<h1 id="准备环境"><a href="#准备环境" class="headerlink" title="准备环境"></a>准备环境</h1><p>可以直接采用公有云Github创建一个公开仓库进行学习，当然你也可以按照 Gitea 官方安装手册 自己部署示例进行练习。</p>
+<p>github 准备一个空仓库，新建 .github&#x2F;workflows&#x2F;ci-demo.yml 文件，<br>gitea则新建 .gitea&#x2F;workflows&#x2F;ci-demo.yml</p>
+<p>编写一个简单的配置文件，示例如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">name: GitHub Actions Demo</span><br><span class="line">run-name: $&#123;&#123; github.actor &#125;&#125; is testing out GitHub Actions 🚀</span><br><span class="line">on: [push]</span><br><span class="line">jobs:</span><br><span class="line">  Explore-GitHub-Actions:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    steps:</span><br><span class="line">      - run: echo &quot;🎉 The job was automatically triggered by a $&#123;&#123; github.event_name &#125;&#125; event.&quot;</span><br><span class="line">      - run: echo &quot;🐧 This job is now running on a $&#123;&#123; runner.os &#125;&#125; server hosted by GitHub!&quot;</span><br><span class="line">      - run: echo &quot;🔎 The name of your branch is $&#123;&#123; github.ref &#125;&#125; and your repository is $&#123;&#123; github.repository &#125;&#125;.&quot;</span><br><span class="line">      - name: Check out repository code</span><br><span class="line">        uses: actions/checkout@v4</span><br><span class="line">      - run: echo &quot;💡 The $&#123;&#123; github.repository &#125;&#125; repository has been cloned to the runner.&quot;</span><br><span class="line">      - run: echo &quot;🖥️ The workflow is now ready to test your code on the runner.&quot;</span><br><span class="line">      - name: List files in the repository</span><br><span class="line">        run: |</span><br><span class="line">          ls $&#123;&#123; github.workspace &#125;&#125;</span><br><span class="line">      - run: echo &quot;🍏 This job&#x27;s status is $&#123;&#123; job.status &#125;&#125;.&quot;</span><br></pre></td></tr></table></figure>
+
+<p>建一个私人的 <code>test</code> 空仓库。<br>点进去 再点 <code>actions</code>，建立自定义workflow如下命名和粘贴就行。最后右上角commit提交<br><img src="https://roim-picx-bpc.pages.dev/rest/vhy1aoK.png" alt="6.png"></p>
+<p>上方是一个示例demo，github actions默认是自动开启，使用gitea actions则需要按照 <code>手动启用仓库actions</code> ，当你推送文件到仓库时候，就会自动执行了。</p>
+<p>github actions运行截图：仓库导航 -&gt; Acitons -&gt; 左侧导航All workflows -&gt; 查看Explore-GitHub-Actions -&gt; 点击查看详情<br><img src="https://roim-picx-bpc.pages.dev/rest/g3bCaoK.png" alt="7.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/eYw1aoK.png" alt="8.png"></p>
+<p>gitea则直接创建空仓库test后 点击代码 新建文件后提交。</p>
+<p>gitea actions运行截图：仓库导航 -&gt; Acitons -&gt; 左侧导航所有工作流 -&gt; 点击查看详情<br><img src="https://roim-picx-bpc.pages.dev/rest/p7KKaoK.png" alt="9.png"><br>这里的没有runner在线，是因为我们只部署了gitea，没有配置gitea action，可以部署一个Act-Runner，参考教程：<br><a target="_blank" rel="noopener" href="https://b.voiceclouds.cn/archives/pveazgitearunner">https://b.voiceclouds.cn/archives/pveazgitearunner</a></p>
+<p>确认有了runner后，</p>
+<p>github actions运行截图：仓库导航 -&gt; Acitons -&gt; 左侧导航All workflows -&gt; 查看Explore-GitHub-Actions -&gt; 点击查看详情</p>
+<p>就是正常的了。<br><img src="https://roim-picx-bpc.pages.dev/rest/GrFvaoK.png" alt="15.png"><br>以上步骤运行成功，说明你的环境没有任何问题，可以继续往下学习了。</p>
+<h1 id="常用组件名词解释"><a href="#常用组件名词解释" class="headerlink" title="常用组件名词解释"></a>常用组件名词解释</h1><h2 id="Workflows-工作流程"><a href="#Workflows-工作流程" class="headerlink" title="Workflows(工作流程)"></a>Workflows(工作流程)</h2><p>工作流程是一个可配置的自动化过程，它将运行一个或多个作业。 工作流程由签入到存储库的 YAML 文件定义，并在存储库中的事件触发时运行，也可以手动触发，或按定义的时间表触发。</p>
+<p>工作流程在存储库的 【github】.github&#x2F;workflows 或者 【gitea】 .gitea&#x2F;workflows 目录中定义，存储库可以有多个工作流程，每个工作流程都可以执行不同的任务集。 例如，您可以有一个工作流程来构建和测试拉取请求，另一个工作流程用于在每次创建发布时部署应用程序，还有一个工作流程在每次有人打开新议题时添加标签。</p>
+<h2 id="Events-事件"><a href="#Events-事件" class="headerlink" title="Events(事件)"></a>Events(事件)</h2><p>事件是存储库中触发工作流程运行的特定活动。 例如，当有人创建拉取请求、打开议题或将提交推送到存储库时，活动可能源自 GitHub。此外，还可以通过回调api或者手动方式触发工作流按计划运行。</p>
+<h2 id="Jobs-任务"><a href="#Jobs-任务" class="headerlink" title="Jobs(任务)"></a>Jobs(任务)</h2><p>作业是工作流中在同一运行器上执行的一组步骤。 每个步骤要么是一个将要执行的 shell 脚本，要么是一个将要运行的动作。 步骤按顺序执行，并且相互依赖。 由于每个步骤都在同一运行器上执行，因此您可以将数据从一个步骤共享到另一个步骤。 例如，可以有一个生成应用程序的步骤，后跟一个测试已生成应用程序的步骤。</p>
+<p>您可以配置作业与其他作业的依赖关系；默认情况下，作业没有依赖关系，并且彼此并行运行。 当一个作业依赖于另一个作业时，它将等待从属作业完成，然后才能运行。 例如，对于没有依赖关系的不同体系结构，您可能有多个生成作业，以及一个依赖于这些作业的打包作业。 生成作业将并行运行，当它们全部成功完成后，打包作业将运行。</p>
+<h2 id="Steps-步骤"><a href="#Steps-步骤" class="headerlink" title="Steps(步骤)"></a>Steps(步骤)</h2><p>步骤，某个任务下的多个步骤。步骤可以是操作，也可以是 shell 命令。作业中的每个步骤都在同一个运行程序上执行，从而允许该作业中的操作彼此共享数据。</p>
+<h2 id="Actions-操作"><a href="#Actions-操作" class="headerlink" title="Actions(操作)"></a>Actions(操作)</h2><p>操作是用于 GitHub Actions 平台的自定义应用程序，它执行复杂但经常重复的任务。 使用操作可帮助减少在工作流程文件中编写的重复代码量。 操作可以从 GitHub 拉取 git 存储库，为您的构建环境设置正确的工具链，或设置对云提供商的身份验证。</p>
+<p>您可以编写自己的操作，也可以在 GitHub Marketplace 中找到要在工作流程中所有可以使用的操作</p>
+<h2 id="Runners-运行器"><a href="#Runners-运行器" class="headerlink" title="Runners(运行器)"></a>Runners(运行器)</h2><p>运行程序是触发工作流时运行工作流的服务器。 每个运行器一次可以运行一个作业。 GitHub 提供 Ubuntu Linux、Microsoft Windows 和 macOS 运行器来运行您的工作流程；每个工作流程运行都在新预配的全新虚拟机中执行。 GitHub 还提供 大型运行器（适用于大型配置）。如果需要其他操作系统或特定硬件配置，可托管自己的运行器。</p>
+<h1 id="了解工作流配置文件"><a href="#了解工作流配置文件" class="headerlink" title="了解工作流配置文件"></a>了解工作流配置文件</h1><p>我们拿前面的ci-demo.yml工作流程来说明一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">name: GitHub Actions Demo # 可选 - 工作流程的名称，它将显示在 GitHub 存储库的“操作”选项卡中。如果省略此字段，则将使用工作流程文件的名称</span><br><span class="line">run-name: $&#123;&#123; github.actor &#125;&#125; is testing out GitHub Actions 🚀 # 工作流生成的工作流运行的名称，Gitea本文编写时暂时不支持</span><br><span class="line">on: [push] # 指定此工作流的触发器。此示例使用 push 事件，因此每次有人将更改推送到存储库或合并拉取请求时都会触发工作流运行。这是由对每个分支的推送触发的；有关仅在推送到特定分支、路径或标签时运行的语法示例，请参阅“GitHub Actions 的工作流语法”。</span><br><span class="line">jobs: # 工作流程中运行的所有作业job聚合在一起。</span><br><span class="line">  Explore-GitHub-Actions: # 定义一个名为 Explore-GitHub-Actions 的作业job。下面则将定义作业的属性。</span><br><span class="line">    runs-on: ubuntu-latest # 将作业配置为在最新版本的 ubuntu-latest 运行程序上运行。这意味着该作业将在 GitHub 托管的新虚拟机上执行。</span><br><span class="line">    steps: # 作业中运行的所有操作聚合在一起。</span><br><span class="line">      - run: echo &quot;🎉 The job was automatically triggered by a $&#123;&#123; github.event_name &#125;&#125; event.&quot; # run 关键字告诉作业在运行器上执行命令。 下面也同样的。</span><br><span class="line">      - run: echo &quot;🐧 This job is now running on a $&#123;&#123; runner.os &#125;&#125; server hosted by GitHub!&quot;</span><br><span class="line">      - run: echo &quot;🔎 The name of your branch is $&#123;&#123; github.ref &#125;&#125; and your repository is $&#123;&#123; github.repository &#125;&#125;.&quot;</span><br><span class="line">      - name: Check out repository code # name关键字设置操作步骤的名称，界面上流程会展示出来</span><br><span class="line">        uses: actions/checkout@v4  # uses 关键字指定此步骤将运行 actions/checkout 操作的 v4 。这是一个将存储库检出到运行器上的操作，允许您针对代码运行脚本或其他操作（例如构建和测试工具）。只要您的工作流程将使用存储库的代码，您就应该使用签出操作。</span><br><span class="line">      - run: echo &quot;💡 The $&#123;&#123; github.repository &#125;&#125; repository has been cloned to the runner.&quot;</span><br><span class="line">      - run: echo &quot;🖥️ The workflow is now ready to test your code on the runner.&quot;</span><br><span class="line">      - name: List files in the repository</span><br><span class="line">        run: | # 执行多行命令可以直接使用| 然后写多行命令</span><br><span class="line">          ls $&#123;&#123; github.workspace &#125;&#125;</span><br><span class="line">      - run: echo &quot;🍏 This job&#x27;s status is $&#123;&#123; job.status &#125;&#125;.&quot;</span><br></pre></td></tr></table></figure>
+
+<p>GitHub Actions 的工作流语法：<a target="_blank" rel="noopener" href="https://docs.github.com/zh/actions/using-workflows/workflow-syntax-for-github-actions#run-name">https://docs.github.com/zh/actions/using-workflows/workflow-syntax-for-github-actions#run-name</a></p>
+<p>知道每个步骤的写法，我们可以参考官方语法自己定义手写一个：有两个job，job2依赖job1，job1使用ubuntu，job2使用windows</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">name: test ci</span><br><span class="line">run-name: test run name</span><br><span class="line">on:</span><br><span class="line">  push:</span><br><span class="line">    branches:</span><br><span class="line">      - master</span><br><span class="line">jobs:</span><br><span class="line">  job1:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    steps:</span><br><span class="line">      - name: 步骤1</span><br><span class="line">        run: ls -lh</span><br><span class="line">      - name: 步骤2</span><br><span class="line">        run: |</span><br><span class="line">          pwd</span><br><span class="line">          date</span><br><span class="line">      - name: 步骤3：检出代码</span><br><span class="line">        uses: actions/checkout@v4</span><br><span class="line">      - name: 步骤4</span><br><span class="line">        run: |</span><br><span class="line">          ls -lh</span><br><span class="line">          date</span><br><span class="line">  job2:</span><br><span class="line">    needs: [job1]</span><br><span class="line">    runs-on: windows-latest</span><br><span class="line">    steps:</span><br><span class="line">      - name: job2步骤1</span><br><span class="line">        run: git version</span><br></pre></td></tr></table></figure>
+
+<p>在github上测试了，因为本地nas的gitea目前只有一个runner（ubuntu）就不测试了。</p>
+<p>后面再慢慢学习吧。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果只是存储代码。可能不需要runner去测试，runner大致是为了在github上用于流程打包发布版本，编译所用的一个虚拟机（linux，macos，win等等都是不同的runner）。</p>
+<p>暂未测试runner本地的docker大概占用多少资源，占用多的话，我也打算关掉它。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2025/02/17/PVE%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%86%85portainer%E5%AE%89%E8%A3%85%E5%AE%89%E8%A3%85gitea%20runner/">PVE虚拟机内portainer安装安装gitea runner</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2025/02/16/1panel%E9%83%A8%E7%BD%B2halo%E6%8A%A5%E9%94%99502/">1panel部署halo报错502</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-text">概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E7%8E%AF%E5%A2%83"><span class="toc-text">准备环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%BB%84%E4%BB%B6%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A"><span class="toc-text">常用组件名词解释</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Workflows-%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">Workflows(工作流程)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Events-%E4%BA%8B%E4%BB%B6"><span class="toc-text">Events(事件)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jobs-%E4%BB%BB%E5%8A%A1"><span class="toc-text">Jobs(任务)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Steps-%E6%AD%A5%E9%AA%A4"><span class="toc-text">Steps(步骤)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Actions-%E6%93%8D%E4%BD%9C"><span class="toc-text">Actions(操作)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Runners-%E8%BF%90%E8%A1%8C%E5%99%A8"><span class="toc-text">Runners(运行器)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%86%E8%A7%A3%E5%B7%A5%E4%BD%9C%E6%B5%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">了解工作流配置文件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-text">后记</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

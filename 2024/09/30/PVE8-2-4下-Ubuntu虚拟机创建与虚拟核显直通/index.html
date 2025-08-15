@@ -1,0 +1,1033 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>PVE8.2.4下-Ubuntu虚拟机创建与虚拟核显直通 - Hexo</title>
+
+  
+    <meta name="description" content="背景之前弄了allinone，是时候上docker了。 配置首先先说一下我的配置吧，配置大概就是这样，下面说一下主要思路吧，以PVE为基础，做五个虚拟系统，nas、旁路网关、docker载体、桌面OS（linux+win）。 1、旁路网关（已搭建）。我用的是istoreos，，从稳定性的角度来看，目前我也是把他作为旁路网关，主路由还是我的小米AX3000T。 2、docker的载体，我选用的ubu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PVE8.2.4下-Ubuntu虚拟机创建与虚拟核显直通">
+<meta property="og:url" content="http://example.com/2024/09/30/PVE8-2-4%E4%B8%8B-Ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%88%9B%E5%BB%BA%E4%B8%8E%E8%99%9A%E6%8B%9F%E6%A0%B8%E6%98%BE%E7%9B%B4%E9%80%9A/">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景之前弄了allinone，是时候上docker了。 配置首先先说一下我的配置吧，配置大概就是这样，下面说一下主要思路吧，以PVE为基础，做五个虚拟系统，nas、旁路网关、docker载体、桌面OS（linux+win）。 1、旁路网关（已搭建）。我用的是istoreos，，从稳定性的角度来看，目前我也是把他作为旁路网关，主路由还是我的小米AX3000T。 2、docker的载体，我选用的ubu">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/WotiRHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/VTkURHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/SV7YRHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/f4KYRHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/SFVYRHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/tkNarHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/niParHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/qz70rHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/81i0rHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/HX2BrHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/eicCrHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/FB0ZvHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/AY8zvHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/lRFzvHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/UnhQWHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/dgIQWHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/3n4QWHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/5xeQWHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/rg5aWHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/rg5aWHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/pqmAsHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/iKHvsHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/a3CYsHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/pT1CTHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/Qi4CTHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/pvJCTHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/XISCTHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/O5GcTHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/5zScTHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/BbKMWHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/naIHtHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/dcX7tHK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/rVJPWHK.png">
+<meta property="article:published_time" content="2024-09-30T12:26:21.000Z">
+<meta property="article:modified_time" content="2025-08-15T12:26:55.009Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://roim-picx-bpc.pages.dev/rest/WotiRHK.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2024-09-30T20:26:21+08:00","dateModified":"2025-08-15T20:26:55+08:00","datePublished":"2024-09-30T20:26:21+08:00","description":"","headline":"PVE8.2.4下-Ubuntu虚拟机创建与虚拟核显直通","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/09/30/PVE8-2-4%E4%B8%8B-Ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%88%9B%E5%BB%BA%E4%B8%8E%E8%99%9A%E6%8B%9F%E6%A0%B8%E6%98%BE%E7%9B%B4%E9%80%9A/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2024/09/30/PVE8-2-4%E4%B8%8B-Ubuntu%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%88%9B%E5%BB%BA%E4%B8%8E%E8%99%9A%E6%8B%9F%E6%A0%B8%E6%98%BE%E7%9B%B4%E9%80%9A/","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/08/11/%E5%AE%9D%E5%A1%94%E9%83%A8%E7%BD%B2message-pusher/"><span class="title">宝塔部署message-pusher</span></a><a class="item title" href="/2025/07/27/pine%E7%89%88%E6%9C%AC5%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%89%88%E6%9C%AC6%E5%90%8E%EF%BC%8C%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7%E5%8F%98%E5%A4%9A%E4%BA%86%EF%BC%9F/"><span class="title">pine版本5转换为版本6后，交易信号变多了？</span></a><a class="item title" href="/2025/07/21/pine%20%E7%AD%96%E7%95%A5%E4%BA%A4%E6%98%93%E6%98%BE%E7%A4%BAlabel/"><span class="title">pine 策略交易显示label</span></a><a class="item title" href="/2025/07/20/pine%E6%9B%BF%E4%BB%A3ifelse%E7%9A%84switch%E8%AF%AD%E6%B3%95/"><span class="title">pine替代ifelse的switch语法</span></a><a class="item title" href="/2025/07/20/pine%E5%A4%9A%E5%B8%81%E7%A7%8D%E7%AD%96%E7%95%A5%E8%AD%A6%E6%8A%A5/"><span class="title">pine多币种策略警报</span></a><a class="item title" href="/2025/07/19/pine%E5%9B%BE%E4%B8%AD%E6%A0%87%E7%AD%BE%E5%88%B6%E4%BD%9C%E5%8F%8A%E7%BE%8E%E5%8C%96/"><span class="title">pine图中标签制作及美化</span></a><a class="item title" href="/2025/07/18/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5/"><span class="title">pine多指标选择策略</span></a><a class="item title" href="/2025/07/17/pine%E7%89%88%E6%9C%AC6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E6%94%AF%E6%8C%81%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/"><span class="title">pine版本6自定义函数支持命名参数传递</span></a><a class="item title" href="/2025/07/17/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E5%BB%BA%E7%AB%8B%E8%AD%A6%E6%8A%A5/"><span class="title">pine多指标建立警报</span></a><a class="item title" href="/2025/07/09/%E5%BC%80%E9%80%9A%E6%90%AC%E7%93%A6%E5%B7%A5%E7%A7%AF%E5%88%86/"><span class="title">开通搬瓦工积分</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-09-30T12:26:21.000Z">2024-09-30</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-08-15T12:26:55.009Z">2025-08-15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>PVE8.2.4下-Ubuntu虚拟机创建与虚拟核显直通</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>之前弄了allinone，是时候上docker了。</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>首先先说一下我的配置吧，<br><img src="https://roim-picx-bpc.pages.dev/rest/WotiRHK.png" alt="1.png"><br>配置大概就是这样，下面说一下主要思路吧，以PVE为基础，做五个虚拟系统，nas、旁路网关、docker载体、桌面OS（linux+win）。</p>
+<p>1、旁路网关（已搭建）。我用的是istoreos，，从稳定性的角度来看，目前我也是把他作为旁路网关，主路由还是我的小米AX3000T。</p>
+<p>2、docker的载体，我选用的ubuntu的服务器版，之所以选用这个版本，也没什么特别的原因，只是linux的桌面版比较喜欢ubuntu而已，但据说centos服务器版跟稳定一下，不过无所谓吧，我觉得差不多。另外不选择把docker直接安装到PVE里主要还是处于稳定性考虑。</p>
+<p>之前已经将12300T核显虚拟了3个分身<br><img src="https://roim-picx-bpc.pages.dev/rest/VTkURHK.png" alt="2.png"></p>
+<h1 id="计划"><a href="#计划" class="headerlink" title="计划"></a>计划</h1><p>在PVE虚拟机模式下, Linux系统使用宿主机基于SR-IOV虚拟的核显. Ubuntu22.04LTS服务器版系统的虚拟机。</p>
+<p>虽然近期发布了24.04LTS，但我还是先用旧的吧。</p>
+<h1 id="安装-Ubuntu-22-04-LTS"><a href="#安装-Ubuntu-22-04-LTS" class="headerlink" title="安装 Ubuntu 22.04 LTS"></a>安装 Ubuntu 22.04 LTS</h1><ol>
+<li>安装 Ubuntu 22.04 LTS</li>
+</ol>
+<p>手工下载 Ubuntu 22.04 LTS ISO 镜像，<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/ubuntu-releases/22.04/ubuntu-22.04.4-live-server-amd64.iso">阿里云 ISO 镜像下载地址</a>。手工上传到 PVE 系统。</p>
+<p>我选择通过 PVE 自动下载 ISO（推荐）</p>
+<h1 id="虚拟机创建"><a href="#虚拟机创建" class="headerlink" title="虚拟机创建"></a>虚拟机创建</h1><p>在pve节点下新建虚拟机</p>
+<p>如图二到十, 虚拟机配置设置</p>
+<p>准备在pve节点下新建虚拟机<br><img src="https://roim-picx-bpc.pages.dev/rest/SV7YRHK.png" alt="4.png"><br>常规设置页面, 填入虚拟机的名字, 然后点击下一步<br><img src="https://roim-picx-bpc.pages.dev/rest/f4KYRHK.png" alt="5.png"><br>选择引导镜像, 首先选择镜像所在存储节点, 然后在镜像列表中选择目标镜像; 之后点击下一步<br><img src="https://roim-picx-bpc.pages.dev/rest/SFVYRHK.png" alt="6.png"><br>磁盘设置, 选择存储节点, 磁盘大小64gb后, 点击下一步<br><img src="https://roim-picx-bpc.pages.dev/rest/tkNarHK.png" alt="7.png"><br>CPU设置页面, 修改要分配的核心数, 类别选择host, 然后点击下一步（6）<br><img src="https://roim-picx-bpc.pages.dev/rest/niParHK.png" alt="8.png"><br>内存设置, 根据需要调整大小, 然后点击下一步（6144 6144）<br><img src="https://roim-picx-bpc.pages.dev/rest/qz70rHK.png" alt="9.png"><br>络设置, 取消勾选防火墙, 避免远程访问的一些问题; 选择默认的半虚拟化, 然后点击下一步<br><img src="https://roim-picx-bpc.pages.dev/rest/81i0rHK.png" alt="10.png"><br>确认配置无误后, 点击完成</p>
+<p>调整虚拟机引导顺序配置, 将系统镜像设置为第一引导选项，之后点击控制台, 启动虚拟机开始系统安装</p>
+<p>在控制台页面, 点击start now开始运行虚拟机<br><img src="https://roim-picx-bpc.pages.dev/rest/HX2BrHK.png" alt="11.png"><br>虚拟机运行后, 后面是正常的Ubuntu系统安装过程,按提示进行</p>
+<p>安装完会提示要移除cd设备</p>
+<p>点击左侧工具栏, 电源按钮, Hard Stop强制关机<br><img src="https://roim-picx-bpc.pages.dev/rest/eicCrHK.png" alt="12.png"><br>系统安装完毕后, 需要先停止虚拟机, 修改引导选项, 取消使用iso镜像引导</p>
+<h1 id="启动虚拟机"><a href="#启动虚拟机" class="headerlink" title="启动虚拟机"></a>启动虚拟机</h1><p>配置国内源(root或sudo权限用户)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">sudo mv /etc/apt/sources.list /etc/apt/sources.list.backup</span><br><span class="line">sudo vim /etc/apt/sources.list</span><br><span class="line"># 添加内容</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line"># deb-src http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line"># 预发布软件源，不建议启用</span><br><span class="line"># deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line"># # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line">&quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<h1 id="配置dns和网关"><a href="#配置dns和网关" class="headerlink" title="配置dns和网关"></a>配置dns和网关</h1><p>使用旁路网关</p>
+<p>刚好讲下ubantu系统</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/netplan/00-installer-config.yaml</span><br></pre></td></tr></table></figure>
+
+<p>修改前</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># This is the network config written by &#x27;subiquity&#x27;</span><br><span class="line">network:</span><br><span class="line">  ethernets:</span><br><span class="line">    enp6s18:</span><br><span class="line">      dhcp4: true</span><br><span class="line">  version: 2</span><br></pre></td></tr></table></figure>
+
+<p>修改后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># This is the network config written by &#x27;subiquity&#x27;</span><br><span class="line">network:</span><br><span class="line">  version: 2</span><br><span class="line">  renderer: networkd</span><br><span class="line">  ethernets:</span><br><span class="line">    enp6s18:  #your net card</span><br><span class="line">     dhcp4: no</span><br><span class="line">     addresses: [192.168.31.104/24] # static ip</span><br><span class="line">     nameservers:</span><br><span class="line">       addresses: [192.168.31.2] # gateway as dns</span><br><span class="line">     routes:</span><br><span class="line">         - to: default</span><br><span class="line">           via: 192.168.31.2  ## gateway</span><br></pre></td></tr></table></figure>
+
+<p>重启网络</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo netplan apply</span><br></pre></td></tr></table></figure>
+
+<p>测试是否可以谷歌<br><code>wget/ping google.com </code><br>笔者ping没有延迟，但是wget可以下载到页面，说明走了旁路。</p>
+<h1 id="驱动安装与配置调整"><a href="#驱动安装与配置调整" class="headerlink" title="驱动安装与配置调整"></a>驱动安装与配置调整</h1><p>驱动安装的主要过程与PVE8.2下配置SR-IOV虚拟核显相似, 主要区别在于不在需要sysfsutils工具库安装以及对应的&#x2F;etc&#x2F;sysfs.conf配置.</p>
+<p>系统信息查看</p>
+<p>ubuntu22.04.4 LTS使用的内核为5.15.0-118-generic, 与PVE8.2内核（我降级的）6.5.13-3-pve版本差的有点大</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 系统</span><br><span class="line">cat /etc/os-release</span><br><span class="line"># 内核</span><br><span class="line">uname -ar</span><br></pre></td></tr></table></figure>
+
+<h1 id="升级内核到6-5-0-35-generic"><a href="#升级内核到6-5-0-35-generic" class="headerlink" title="升级内核到6.5.0-35-generic"></a>升级内核到6.5.0-35-generic</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-cache search linux-image | grep &#x27;6.5.0&#x27;|grep &#x27;generic&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>存在 linux-image-6.5.0-35-generic</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install linux-headers-6.5.0-35-generic</span><br><span class="line">sudo apt-get install linux-image-6.5.0-35-generic</span><br><span class="line">sudo apt-get install linux-modules-6.5.0-35-generic</span><br><span class="line">sudo apt-get install linux-modules-extra-6.5.0-35-generic</span><br><span class="line">update-grub #更新配置，默认最新的kernel会第一顺序启动</span><br></pre></td></tr></table></figure>
+
+<p>重启<br><code>uname -r</code> #验证显示</p>
+<p>6.5.0-35-generic</p>
+<p>成功。</p>
+<p>APT软件源索引更新与必要工具软件安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install -y git build-* dkms # 必要编译工具安装</span><br><span class="line"></span><br><span class="line"># 可选</span><br><span class="line"># apt install -y vim</span><br></pre></td></tr></table></figure>
+
+<p>核显虚拟化驱动项目的源码下载与配置修改(需要切换root执行)</p>
+<p>设置环境变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"># 切换到root</span><br><span class="line">sudo -i</span><br><span class="line"></span><br><span class="line">KERNEL=$(uname -r); KERNEL=$&#123;KERNEL%-generic&#125;</span><br><span class="line">echo $&#123;KERNEL&#125;</span><br><span class="line"></span><br><span class="line"># 进入root家目录, 下载驱动项目源码</span><br><span class="line">cd ~</span><br><span class="line">git clone https://github.com/strongtz/i915-sriov-dkms.git</span><br><span class="line">cd ~/i915-sriov-dkms</span><br><span class="line"></span><br><span class="line"># 备选操作</span><br><span class="line"># 2024.04.20最新commit的版本编译安装阶段可能导致失败, 相关问题issue暂未解决</span><br><span class="line"># 建议切换到2023.12月份的版本尝试, 可以执行如下代码, 之后再继续操作</span><br><span class="line">git checkout cdb1399821e942db6fcc2b8322da72b517a9bc0d</span><br><span class="line"></span><br><span class="line"># 修改项目配置</span><br><span class="line">cp -a ~/i915-sriov-dkms/dkms.conf&#123;,.bak&#125;</span><br><span class="line">sed -i &#x27;s/&quot;@_PKGBASE@&quot;/&quot;i915-sriov-dkms&quot;/g&#x27; ~/i915-sriov-dkms/dkms.conf</span><br><span class="line">sed -i &#x27;s/&quot;@PKGVER@&quot;/&quot;&#x27;&quot;$KERNEL&quot;&#x27;&quot;/g&#x27; ~/i915-sriov-dkms/dkms.conf</span><br><span class="line"># sed -i &#x27;s/ -j$(nproc)//g&#x27; ~/i915-sriov-dkms/dkms.conf</span><br><span class="line"></span><br><span class="line"># 查看修改后结果</span><br><span class="line">cat ~/i915-sriov-dkms/dkms.conf</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://roim-picx-bpc.pages.dev/rest/FB0ZvHK.png" alt="57.png"><br>DKMS添加驱动源码管理并安装部署</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 链接内核源代码，并检查状态。确认内核显示已添加。</span><br><span class="line">sudo cp -r ~/i915-sriov-dkms /usr/src/i915-sriov-dkms-$KERNEL</span><br><span class="line">ls /usr/src # 查看</span><br><span class="line"></span><br><span class="line">cd /usr/src/i915-sriov-dkms-$KERNEL</span><br><span class="line">dkms add .</span><br><span class="line">dkms status</span><br><span class="line"></span><br><span class="line"># 构建新内核并检查状态。验证是否显示已安装。</span><br><span class="line"># 安装内核扩展, 会触发MOK相关设置.</span><br><span class="line">sudo dkms install -m i915-sriov-dkms -v $KERNEL -k $(uname -r) --force -j 4</span><br></pre></td></tr></table></figure>
+
+<p>构建安装内核扩展, 提示需要安全引导已启用,需要设置MOK,此处随意设置一个不太简单密码备用, 正常只会再使用一次.<br><img src="https://roim-picx-bpc.pages.dev/rest/AY8zvHK.png" alt="58.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/lRFzvHK.png" alt="59.png"><br>再输入一遍，确认。</p>
+<h1 id="GRUB-配置"><a href="#GRUB-配置" class="headerlink" title="GRUB 配置"></a>GRUB 配置</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 解释: i915.max_vfs=7 表示最多虚拟成3个设备</span><br><span class="line">cp -a /etc/default/grub&#123;,.bak&#125; </span><br><span class="line"># 会在第10行追加内容: intel_iommu=on iommu=pt i915.enable_guc=3 i915.max_vfs=3</span><br><span class="line">sed -i &#x27;/^GRUB_CMDLINE_LINUX_DEFAULT/c\GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet splash intel_iommu=on iommu=pt i915.enable_guc=3 i915.max_vfs=3&quot;&#x27; /etc/default/grub</span><br><span class="line"></span><br><span class="line"># 更新引导</span><br><span class="line">update-grub</span><br><span class="line">update-initramfs -u -k all</span><br></pre></td></tr></table></figure>
+
+<h1 id="系统重启与引导项MOK配置"><a href="#系统重启与引导项MOK配置" class="headerlink" title="系统重启与引导项MOK配置"></a>系统重启与引导项MOK配置</h1><p>执行到此, 应该对该虚拟机系统进行重启, 但需要额外强调下:</p>
+<p>因为当前版本系统启用了安全引导, 因此必须在安装驱动后, 重启进入系统前, 在引导页面进行MOK相关配置. 只需在第一次重启配置成功, 之后不在需要设置.</p>
+<p>开机启动&#x2F;引导项MOK配置过程: Enroll MOK, Continue, Yes, <password>, Reboot</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 重启机器, 在开机页面, 开机引导页面依次选择: </span><br><span class="line"># * Enroll MOK, Continue, Yes, &lt;password&gt;, Reboot</span><br><span class="line"># 如果错过, 需要进入终端, 重新运行 mokutil ... 命令并再次重启。</span><br><span class="line"># 在完成此设置之前，DKMS 模块不会加载。</span><br><span class="line"></span><br><span class="line"># Ubuntu重置MOK</span><br><span class="line"># 参见: https://wiki.ubuntu.com/UEFI/SecureBoot</span><br><span class="line">update-secureboot-policy --enroll-key</span><br></pre></td></tr></table></figure>
+
+<p>图片按钮如下：<br><img src="https://roim-picx-bpc.pages.dev/rest/UnhQWHK.png" alt="60.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/dgIQWHK.png" alt="61.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/3n4QWHK.png" alt="62.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/5xeQWHK.png" alt="63.png"></p>
+<p>密码就是刚才设置的mok密码，不是root ssh密码。</p>
+<p>先关机</p>
+<h1 id="虚拟机配置调整"><a href="#虚拟机配置调整" class="headerlink" title="虚拟机配置调整"></a>虚拟机配置调整</h1><p>接下来我们需要调整虚拟机显示配置, 移除默认显示设别, 同时添加宿主机的虚拟PCI集显, 之后关闭系统, 使配置生效; 然后启动系统, 通过SSH远程登录系统, 通过如下命令行可以如下输出.</p>
+<ol>
+<li>虚拟机关机</li>
+<li>修改虚拟机配置2处<br><img src="https://roim-picx-bpc.pages.dev/rest/rg5aWHK.png" alt="64.png"><br>显示修改为无，添加pci虚拟的核显，勾选如图，添加。</li>
+<li>开启虚拟机<br><code>ls /dev/dri</code><br><img src="https://roim-picx-bpc.pages.dev/rest/rg5aWHK.png" alt="64.png"><br>以上是正确添加了虚拟化核显。没有添加会少一个renderD128</li>
+</ol>
+<h1 id="效果验证"><a href="#效果验证" class="headerlink" title="效果验证"></a>效果验证</h1><p>通过以上步骤完成虚拟化集显设备直通后, 下面我们基于Docker部署Jellyfen在线流媒体应用, 验证集显直通是否成功.</p>
+<ol>
+<li>集显查询工具</li>
+</ol>
+<p>为了了解集显的实时使用情况, 还需要在pve系统内安装intel_gpu_top工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">apt install intel-gpu-tools</span><br><span class="line"></span><br><span class="line"># LXC容器内,直接执行（我是虚拟机，就没有用这个，直接在pve系统使用查看</span><br><span class="line"># intel_gpu_top</span><br><span class="line"></span><br><span class="line"># PVE宿主机上, 我们配置了SR-IOV虚拟核显, 需要指定真实的核显相关参数</span><br><span class="line"># 否则可能遇到这类错误提示: &quot;Kernel 4.16 or newer is required for i915 PMU support.&quot;</span><br><span class="line"># lspci | grep VGA  # 查看真实显卡地址, 一般不需要修改</span><br><span class="line">intel_gpu_top -d sys:/sys/devices/pci0000:00/0000:00:02.0</span><br></pre></td></tr></table></figure>
+
+<p>PVE宿主机配置配置了SR-IOV虚拟核显, 有三个虚拟核显设备。</p>
+<p>集显未使用时: intel_gpu_top输出<br><img src="https://roim-picx-bpc.pages.dev/rest/pqmAsHK.png" alt="16.png"></p>
+<h1 id="Docker部署"><a href="#Docker部署" class="headerlink" title="Docker部署"></a>Docker部署</h1><p>完成Docker环境安装以及portainer的安装</p>
+<ol>
+<li>一键安装脚本</li>
+</ol>
+<p>下载脚本依赖curl, 可能需要提前安装，可直接敲 <code>curl -h</code>验证</p>
+<p>配置国内加速源, 需要修改配置, 需要安装常用的编辑器, 如vim，可直接敲 <code>vim -h</code>验证</p>
+<p>原始官方部署教程<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/ubuntu/">链接</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 可选</span><br><span class="line"># apt install -y curl vim  </span><br><span class="line"></span><br><span class="line"># 官方脚本, 指定使用Aliyun加速, root权限执行</span><br><span class="line">sudo -i #切换到root</span><br><span class="line">curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun</span><br></pre></td></tr></table></figure>
+
+<p>大环境禁止了，所以上述脚本直接连不到getdocker</p>
+<p>笔者使用代码来源：<br><code>https://github.com/xiehs211/install_docker/blob/main/install_docker.sh</code><br>将上述代码块下载保存到服务器</p>
+<p>运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># </span><br><span class="line">sh install_docker.sh --mirror Aliyun</span><br></pre></td></tr></table></figure>
+
+<p>执行安装后，验证是否安装成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@docker:~# docker --version</span><br><span class="line">Docker version 27.1.2, build d01f264</span><br></pre></td></tr></table></figure>
+
+<h1 id="给普通用户授权docker权限（备用）"><a href="#给普通用户授权docker权限（备用）" class="headerlink" title="给普通用户授权docker权限（备用）"></a>给普通用户授权docker权限（备用）</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 注意登录用户身份</span><br><span class="line">sudo usermod -aG docker $USER  # 需要登出再重新登录才生效(实测需要重启生效)</span><br><span class="line"># 没有生效前 id 与 id $USER 显示不一致</span><br><span class="line"># id $USER 或 cat /etc/group | grep docker  # 查看</span><br><span class="line"></span><br><span class="line">newgrp - docker # 更新用户组 很重要(临时生效)</span><br><span class="line">docker ps    # 测试docker命令是否可以使用sudo正常使用</span><br></pre></td></tr></table></figure>
+
+<p>以上代码我没用。</p>
+<p>因为实际我安装ubantu使用用户名docker，安装docker的root身份是基于普通用户docker（sudo -i)切换的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">root@docker:~# id docker</span><br><span class="line">uid=1000(docker) gid=1000(docker) groups=1000(docker),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),110(lxd)</span><br><span class="line"></span><br><span class="line">root@docker:~# exit</span><br><span class="line">logout</span><br><span class="line"></span><br><span class="line">docker@docker:~$ groups</span><br><span class="line">docker adm cdrom sudo dip plugdev lxd</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在给权限前，我发现docker用户已经有了。</p>
+<p>切回docker用户验证自己的group，也是包含docker的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker@docker:~$ docker ps</span><br><span class="line">CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES</span><br></pre></td></tr></table></figure>
+
+<p>正常使用。</p>
+<h1 id="测试镜像拉取-运行容器"><a href="#测试镜像拉取-运行容器" class="headerlink" title="测试镜像拉取&amp;运行容器"></a>测试镜像拉取&amp;运行容器</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 测试镜像拉取&amp;容器运行</span><br><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
+
+<p>成功走了旁路网关拉取<br><img src="https://roim-picx-bpc.pages.dev/rest/iKHvsHK.png" alt="19.png"></p>
+<h1 id="管理"><a href="#管理" class="headerlink" title="管理"></a>管理</h1><p>portainer是一款流行的web端docker管理工具, 简单易用且能够满足个人折腾的需要, 下面介绍如何部署。</p>
+<ol>
+<li>官方版本（可以跳过）<br>参考<a target="_blank" rel="noopener" href="https://docs.portainer.io/start/install-ce/server/docker/linux">链接</a></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 1. 拉取镜像</span><br><span class="line">docker pull portainer/portainer-ce:latest</span><br><span class="line"></span><br><span class="line"># 2.创建磁盘卷(可选)</span><br><span class="line">docker volume create portainer_data</span><br><span class="line"></span><br><span class="line"># 3. 创建容器</span><br><span class="line"># 端口组合二选一即可, 粘贴代码前注意先删除 自#之后的注释, 避免格式问题</span><br><span class="line">docker run -d --name portainer --restart=always \</span><br><span class="line">-p 8000:8000 -p 9443:9443 \ # https使用, 仅使用http的话可以尝试注释掉</span><br><span class="line">-p 9000:9000 \ # 使用传统的http端口 </span><br><span class="line">-v /var/run/docker.sock:/var/run/docker.sock \</span><br><span class="line">-v portainer_data:/data portainer/portainer-ce:latest</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>汉化版本（笔者用）</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker pull 6053537/portainer-ce:latest</span><br><span class="line"></span><br><span class="line">docker volume create portainer_data</span><br><span class="line"></span><br><span class="line">docker run -d --name portainer-zh --restart=always \</span><br><span class="line">-p 9000:9000 \</span><br><span class="line">-v /var/run/docker.sock:/var/run/docker.sock \</span><br><span class="line">-v portainer_data:/data  6053537/portainer-ce:latest</span><br></pre></td></tr></table></figure>
+
+<p>http:&#x2F;&#x2F;虚拟机ip:9000&#x2F;打开protainer.io</p>
+<p>新安装设置用户名和密码 确定</p>
+<ol start="3">
+<li>设置节点IP<br>节点上部署的容器, 端口映射链接地址, 默认为 0.0.0.0:端口, 此处设置后打开为设定ip:端口</li>
+</ol>
+<p>点击环境-local<br><img src="https://roim-picx-bpc.pages.dev/rest/a3CYsHK.png" alt="20.png"><br>设置虚拟机的ip保存<br><img src="https://roim-picx-bpc.pages.dev/rest/pT1CTHK.png" alt="21.png"></p>
+<p>点击首页-选中local<br><img src="https://roim-picx-bpc.pages.dev/rest/Qi4CTHK.png" alt="22.png"><br><img src="https://roim-picx-bpc.pages.dev/rest/pvJCTHK.png" alt="23.png"><br>再点击容器，就可以点击到所有容器各自的入口（ip和端口—）了</p>
+<p>效果: 节点下容器的端口链接地址<br><img src="https://roim-picx-bpc.pages.dev/rest/XISCTHK.png" alt="24.png"></p>
+<h1 id="jellyfen部署测试核显"><a href="#jellyfen部署测试核显" class="headerlink" title="jellyfen部署测试核显"></a>jellyfen部署测试核显</h1><p>http:&#x2F;&#x2F;虚拟机ip:9000&#x2F;打开protainer.io</p>
+<ol>
+<li>添加容器<br><img src="https://roim-picx-bpc.pages.dev/rest/O5GcTHK.png" alt="25.png"></li>
+<li>设置容器名&#x2F;镜像&#x2F;端口映射<br>名称：Jellyfin</li>
+</ol>
+<p>容器名: nyanmisaka&#x2F;jellyfin:latest</p>
+<p>主机80端口-docker8096端口</p>
+<p><img src="https://roim-picx-bpc.pages.dev/rest/5zScTHK.png" alt="26.png"></p>
+<ol start="3">
+<li>设置共享核显</li>
+</ol>
+<p>找到分配给unbantu系统的虚拟化核显 <code>/dev/dri</code><br><img src="https://roim-picx-bpc.pages.dev/rest/BbKMWHK.png" alt="66.png"><br>按图修改好，部署</p>
+<p>等一分钟, 容器状态会由staring变为healthy, 着急可以手动刷新下查看变化;</p>
+<p>确认变为healthy后, 此时可以通过lxc容器ip地址在浏览器访问<a target="_blank" rel="noopener" href="http://ip端口/">http://ip端口</a>, 开始Jellyfen的初始化</p>
+<p>重启策略设置”除非停止”</p>
+<p><img src="https://roim-picx-bpc.pages.dev/rest/naIHtHK.png" alt="38.png"></p>
+<ol start="4">
+<li>准备工作</li>
+</ol>
+<p>docker所在虚拟机已共享了pve的磁盘。其&#x2F;mnt&#x2F;sda1-16t&#x2F;media目录存在测试视频wsb_B_02_r720P.mp4。</p>
+<p>新建一个nfs存储卷，挂载到jellyfin上&#x2F;video。</p>
+<h1 id="Jellyfen初始化应用"><a href="#Jellyfen初始化应用" class="headerlink" title="Jellyfen初始化应用"></a>Jellyfen初始化应用</h1><p>过程无特殊, 可以参考各类视频&#x2F;博客<br>注意: 添加一个电影文件夹: 路径为前面设置的&#x2F;media目录</p>
+<h1 id="验证实时转码"><a href="#验证实时转码" class="headerlink" title="验证实时转码"></a>验证实时转码</h1><p>设置中启用了硬件加速</p>
+<p>设置缩小影片分辨率或者选择不支持的音&#x2F;视频编码视频播放</p>
+<p><img src="https://roim-picx-bpc.pages.dev/rest/dcX7tHK.png" alt="39.png"></p>
+<p>测试视频720p调低分辨率到360p 420kbps,触发转码, 实时集显使用情况<br><img src="https://roim-picx-bpc.pages.dev/rest/rVJPWHK.png" alt="67.png"><br>完美</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>本次分享重点：</p>
+<ol>
+<li>pve独立了系统</li>
+<li>网络独立了旁路网关</li>
+<li>存储直接挂载nfs</li>
+<li>硬解直通了，核显的虚拟化。</li>
+</ol>
+<p>可以，AIO算是成了。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2024/10/01/%E7%8B%AC%E7%AB%8BIP%E4%B8%8E%E5%85%B1%E4%BA%ABIP%E7%9A%84%E5%8C%BA%E5%88%AB/">独立IP与共享IP的区别</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2024/09/30/PVE%E5%85%B1%E4%BA%AB%E7%A1%AC%E7%9B%98%E7%BB%99windows11/">PVE共享硬盘给windows11</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-text">配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E5%88%92"><span class="toc-text">计划</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Ubuntu-22-04-LTS"><span class="toc-text">安装 Ubuntu 22.04 LTS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%88%9B%E5%BB%BA"><span class="toc-text">虚拟机创建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-text">启动虚拟机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEdns%E5%92%8C%E7%BD%91%E5%85%B3"><span class="toc-text">配置dns和网关</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E8%B0%83%E6%95%B4"><span class="toc-text">驱动安装与配置调整</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8D%87%E7%BA%A7%E5%86%85%E6%A0%B8%E5%88%B06-5-0-35-generic"><span class="toc-text">升级内核到6.5.0-35-generic</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GRUB-%E9%85%8D%E7%BD%AE"><span class="toc-text">GRUB 配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E9%87%8D%E5%90%AF%E4%B8%8E%E5%BC%95%E5%AF%BC%E9%A1%B9MOK%E9%85%8D%E7%BD%AE"><span class="toc-text">系统重启与引导项MOK配置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%85%8D%E7%BD%AE%E8%B0%83%E6%95%B4"><span class="toc-text">虚拟机配置调整</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E9%AA%8C%E8%AF%81"><span class="toc-text">效果验证</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker%E9%83%A8%E7%BD%B2"><span class="toc-text">Docker部署</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%99%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E6%8E%88%E6%9D%83docker%E6%9D%83%E9%99%90%EF%BC%88%E5%A4%87%E7%94%A8%EF%BC%89"><span class="toc-text">给普通用户授权docker权限（备用）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E9%95%9C%E5%83%8F%E6%8B%89%E5%8F%96-%E8%BF%90%E8%A1%8C%E5%AE%B9%E5%99%A8"><span class="toc-text">测试镜像拉取&amp;运行容器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%A1%E7%90%86"><span class="toc-text">管理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#jellyfen%E9%83%A8%E7%BD%B2%E6%B5%8B%E8%AF%95%E6%A0%B8%E6%98%BE"><span class="toc-text">jellyfen部署测试核显</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Jellyfen%E5%88%9D%E5%A7%8B%E5%8C%96%E5%BA%94%E7%94%A8"><span class="toc-text">Jellyfen初始化应用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E5%AE%9E%E6%97%B6%E8%BD%AC%E7%A0%81"><span class="toc-text">验证实时转码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-text">后记</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

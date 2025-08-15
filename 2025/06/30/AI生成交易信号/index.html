@@ -1,0 +1,844 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>AI生成交易信号 - Hexo</title>
+
+  
+    <meta name="description" content="提示词12345678910price &#x3D; pd.read_excel(&#x27;..&#x2F;数据&#x2F;601001策略回测实验数据.xlsx&#x27;,                     index_col&#x3D;&#x27;日期&#x27;)# 将index转换成datetime格式 price.index &#x3D; pd.to_datetime(price.index)# 保留收盘价price &#x3D; pr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI生成交易信号">
+<meta property="og:url" content="http://example.com/2025/06/30/AI%E7%94%9F%E6%88%90%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7/">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="提示词12345678910price &#x3D; pd.read_excel(&#x27;..&#x2F;数据&#x2F;601001策略回测实验数据.xlsx&#x27;,                     index_col&#x3D;&#x27;日期&#x27;)# 将index转换成datetime格式 price.index &#x3D; pd.to_datetime(price.index)# 保留收盘价price &#x3D; pr">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/5vLsnuK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/zbotnuK.png">
+<meta property="article:published_time" content="2025-06-30T12:25:22.000Z">
+<meta property="article:modified_time" content="2025-08-15T14:04:29.421Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://roim-picx-bpc.pages.dev/rest/5vLsnuK.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2025-06-30T20:25:22+08:00","dateModified":"2025-08-15T22:04:29+08:00","datePublished":"2025-06-30T20:25:22+08:00","description":"","headline":"AI生成交易信号","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/06/30/AI%E7%94%9F%E6%88%90%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2025/06/30/AI%E7%94%9F%E6%88%90%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7/","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/08/11/%E5%AE%9D%E5%A1%94%E9%83%A8%E7%BD%B2message-pusher/"><span class="title">宝塔部署message-pusher</span></a><a class="item title" href="/2025/07/27/pine%E7%89%88%E6%9C%AC5%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%89%88%E6%9C%AC6%E5%90%8E%EF%BC%8C%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7%E5%8F%98%E5%A4%9A%E4%BA%86%EF%BC%9F/"><span class="title">pine版本5转换为版本6后，交易信号变多了？</span></a><a class="item title" href="/2025/07/21/pine%20%E7%AD%96%E7%95%A5%E4%BA%A4%E6%98%93%E6%98%BE%E7%A4%BAlabel/"><span class="title">pine 策略交易显示label</span></a><a class="item title" href="/2025/07/20/pine%E6%9B%BF%E4%BB%A3ifelse%E7%9A%84switch%E8%AF%AD%E6%B3%95/"><span class="title">pine替代ifelse的switch语法</span></a><a class="item title" href="/2025/07/20/pine%E5%A4%9A%E5%B8%81%E7%A7%8D%E7%AD%96%E7%95%A5%E8%AD%A6%E6%8A%A5/"><span class="title">pine多币种策略警报</span></a><a class="item title" href="/2025/07/19/pine%E5%9B%BE%E4%B8%AD%E6%A0%87%E7%AD%BE%E5%88%B6%E4%BD%9C%E5%8F%8A%E7%BE%8E%E5%8C%96/"><span class="title">pine图中标签制作及美化</span></a><a class="item title" href="/2025/07/18/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5/"><span class="title">pine多指标选择策略</span></a><a class="item title" href="/2025/07/17/pine%E7%89%88%E6%9C%AC6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E6%94%AF%E6%8C%81%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/"><span class="title">pine版本6自定义函数支持命名参数传递</span></a><a class="item title" href="/2025/07/17/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E5%BB%BA%E7%AB%8B%E8%AD%A6%E6%8A%A5/"><span class="title">pine多指标建立警报</span></a><a class="item title" href="/2025/07/09/%E5%BC%80%E9%80%9A%E6%90%AC%E7%93%A6%E5%B7%A5%E7%A7%AF%E5%88%86/"><span class="title">开通搬瓦工积分</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2025-06-30T12:25:22.000Z">2025-06-30</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-08-15T14:04:29.421Z">2025-08-15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>AI生成交易信号</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="提示词"><a href="#提示词" class="headerlink" title="提示词"></a>提示词</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">price = pd.read_excel(&#x27;../数据/601001策略回测实验数据.xlsx&#x27;,</span><br><span class="line">                     index_col=&#x27;日期&#x27;)</span><br><span class="line"></span><br><span class="line"># 将index转换成datetime格式 </span><br><span class="line">price.index = pd.to_datetime(price.index)</span><br><span class="line"></span><br><span class="line"># 保留收盘价</span><br><span class="line">price = price[[&#x27;收盘&#x27;]]</span><br><span class="line"></span><br><span class="line">在名叫price的DataFrame中，保存了某只股票的每日收盘价。现在需要基于长短期均线生成交易信号，具体为当20日均线上穿100日均线时买入，否则卖出，最后将收盘价、长短期均线和根据交易信号发生的仓位变化进行可视化，仓位变化需要以子图的形式显示在下方，请给出示例代码。</span><br></pre></td></tr></table></figure>
+
+<h1 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import numpy as np</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">from matplotlib.ticker import MaxNLocator</span><br><span class="line"></span><br><span class="line"># 计算移动平均线</span><br><span class="line">price[&#x27;MA20&#x27;] = price[&#x27;收盘&#x27;].rolling(window=20).mean()    # 20日均线</span><br><span class="line">price[&#x27;MA100&#x27;] = price[&#x27;收盘&#x27;].rolling(window=100).mean()  # 100日均线</span><br><span class="line"></span><br><span class="line"># 生成交易信号 (1:买入, 0:卖出)</span><br><span class="line">price[&#x27;Signal&#x27;] = np.where(price[&#x27;MA20&#x27;] &gt; price[&#x27;MA100&#x27;], 1, 0)</span><br><span class="line"></span><br><span class="line"># 计算仓位变化 (当信号从0变1时买入，从1变0时卖出)</span><br><span class="line">price[&#x27;Position&#x27;] = price[&#x27;Signal&#x27;].diff()</span><br><span class="line"></span><br><span class="line"># 创建可视化图表</span><br><span class="line">plt.figure(figsize=(14, 10))</span><br><span class="line">plt.suptitle(&#x27;双均线交易策略 (20日 vs 100日)&#x27;, fontsize=16, fontweight=&#x27;bold&#x27;)</span><br><span class="line"></span><br><span class="line"># 价格和均线图 (主图)</span><br><span class="line">ax1 = plt.subplot(2, 1, 1)</span><br><span class="line">ax1.plot(price.index, price[&#x27;收盘&#x27;], label=&#x27;收盘价&#x27;, color=&#x27;black&#x27;, linewidth=1.5, alpha=0.8)</span><br><span class="line">ax1.plot(price.index, price[&#x27;MA20&#x27;], label=&#x27;20日均线&#x27;, color=&#x27;blue&#x27;, linewidth=1.5)</span><br><span class="line">ax1.plot(price.index, price[&#x27;MA100&#x27;], label=&#x27;100日均线&#x27;, color=&#x27;red&#x27;, linewidth=2)</span><br><span class="line"></span><br><span class="line"># 标记买入卖出信号</span><br><span class="line">buy_signals = price[price[&#x27;Position&#x27;] == 1]</span><br><span class="line">sell_signals = price[price[&#x27;Position&#x27;] == -1]</span><br><span class="line">ax1.scatter(buy_signals.index, buy_signals[&#x27;收盘&#x27;], </span><br><span class="line">            marker=&#x27;^&#x27;, s=80, color=&#x27;green&#x27;, alpha=0.9, label=&#x27;买入信号&#x27;)</span><br><span class="line">ax1.scatter(sell_signals.index, sell_signals[&#x27;收盘&#x27;], </span><br><span class="line">            marker=&#x27;v&#x27;, s=80, color=&#x27;red&#x27;, alpha=0.9, label=&#x27;卖出信号&#x27;)</span><br><span class="line"></span><br><span class="line"># 填充均线之间的区域</span><br><span class="line">ax1.fill_between(price.index, price[&#x27;MA20&#x27;], price[&#x27;MA100&#x27;], </span><br><span class="line">                 where=price[&#x27;MA20&#x27;] &gt;= price[&#x27;MA100&#x27;], </span><br><span class="line">                 facecolor=&#x27;lightgreen&#x27;, alpha=0.3, interpolate=True)</span><br><span class="line">ax1.fill_between(price.index, price[&#x27;MA20&#x27;], price[&#x27;MA100&#x27;], </span><br><span class="line">                 where=price[&#x27;MA20&#x27;] &lt; price[&#x27;MA100&#x27;], </span><br><span class="line">                 facecolor=&#x27;lightcoral&#x27;, alpha=0.3, interpolate=True)</span><br><span class="line"></span><br><span class="line">ax1.set_title(&#x27;价格走势与均线交叉信号&#x27;, fontsize=14)</span><br><span class="line">ax1.set_ylabel(&#x27;价格&#x27;, fontsize=12)</span><br><span class="line">ax1.legend(loc=&#x27;upper left&#x27;)</span><br><span class="line">ax1.grid(True, linestyle=&#x27;--&#x27;, alpha=0.6)</span><br><span class="line"></span><br><span class="line"># 仓位变化图 (子图)</span><br><span class="line">ax2 = plt.subplot(2, 1, 2, sharex=ax1)</span><br><span class="line">ax2.plot(price.index, price[&#x27;Signal&#x27;], </span><br><span class="line">         label=&#x27;持仓状态&#x27;, color=&#x27;purple&#x27;, linewidth=2)</span><br><span class="line">ax2.fill_between(price.index, 0, price[&#x27;Signal&#x27;], </span><br><span class="line">                 where=price[&#x27;Signal&#x27;] &gt;= 0, </span><br><span class="line">                 facecolor=&#x27;purple&#x27;, alpha=0.3)</span><br><span class="line"></span><br><span class="line"># 标记仓位变化点</span><br><span class="line">ax2.scatter(buy_signals.index, np.ones(len(buy_signals)), </span><br><span class="line">            marker=&#x27;^&#x27;, s=80, color=&#x27;green&#x27;, alpha=0.9, label=&#x27;建仓点&#x27;)</span><br><span class="line">ax2.scatter(sell_signals.index, np.zeros(len(sell_signals)), </span><br><span class="line">            marker=&#x27;v&#x27;, s=80, color=&#x27;red&#x27;, alpha=0.9, label=&#x27;平仓点&#x27;)</span><br><span class="line"></span><br><span class="line">ax2.set_title(&#x27;仓位变化&#x27;, fontsize=14)</span><br><span class="line">ax2.set_ylabel(&#x27;仓位状态\n(1=持有, 0=空仓)&#x27;, fontsize=12)</span><br><span class="line">ax2.set_xlabel(&#x27;日期&#x27;, fontsize=12)</span><br><span class="line">ax2.legend(loc=&#x27;upper left&#x27;)</span><br><span class="line">ax2.yaxis.set_major_locator(MaxNLocator(integer=True))  # Y轴只显示整数</span><br><span class="line">ax2.grid(True, linestyle=&#x27;--&#x27;, alpha=0.6)</span><br><span class="line"></span><br><span class="line"># 添加策略说明</span><br><span class="line">stats_text = f&quot;策略统计:\n- 总买入信号: &#123;len(buy_signals)&#125;\n- 总卖出信号: &#123;len(sell_signals)&#125;\n- 最大持仓天数: &#123;price[&#x27;Signal&#x27;].sum()&#125;&quot;</span><br><span class="line">plt.figtext(0.75, 0.25, stats_text, bbox=dict(facecolor=&#x27;white&#x27;, alpha=0.5), fontsize=10)</span><br><span class="line"></span><br><span class="line">plt.tight_layout(rect=[0, 0, 1, 0.96])  # 为标题留出空间</span><br><span class="line">plt.savefig(&#x27;双均线交易策略可视化.png&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"># 输出交易信号详情</span><br><span class="line">print(&quot;交易信号详情:&quot;)</span><br><span class="line">print(price[[&#x27;收盘&#x27;, &#x27;MA20&#x27;, &#x27;MA100&#x27;, &#x27;Signal&#x27;, &#x27;Position&#x27;]].dropna().tail(10))</span><br></pre></td></tr></table></figure>
+
+<p>结果：<br><img src="https://roim-picx-bpc.pages.dev/rest/5vLsnuK.png"></p>
+<h1 id="计算交易策略的收益"><a href="#计算交易策略的收益" class="headerlink" title="计算交易策略的收益"></a>计算交易策略的收益</h1><p>简化代码加描述</p>
+<h2 id="提示词-1"><a href="#提示词-1" class="headerlink" title="提示词"></a>提示词</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># Python代码</span><br><span class="line"># 计算20日均线和100日均线</span><br><span class="line">price[&#x27;short_mavg&#x27;] = price[&#x27;收盘&#x27;].rolling(window=20, min_periods=1).mean()</span><br><span class="line">price[&#x27;long_mavg&#x27;] = price[&#x27;收盘&#x27;].rolling(window=100, min_periods=1).mean()</span><br><span class="line"></span><br><span class="line"># 生成交易信号</span><br><span class="line">price[&#x27;signal&#x27;] = 0.0</span><br><span class="line">price[&#x27;signal&#x27;][price[&#x27;short_mavg&#x27;] &gt; price[&#x27;long_mavg&#x27;]] = 1.0</span><br><span class="line"># 绘制收盘价和均线</span><br><span class="line">plt.figure(dpi=300)</span><br><span class="line"></span><br><span class="line">plt.subplot(2, 1, 1)</span><br><span class="line">plt.plot(price[&#x27;收盘&#x27;], label=&#x27;收盘价&#x27;,lw=1)</span><br><span class="line">plt.plot(price[&#x27;short_mavg&#x27;], label=&#x27;20日均线&#x27;,lw=1)</span><br><span class="line">plt.plot(price[&#x27;long_mavg&#x27;], label=&#x27;100日均线&#x27;,lw=1)</span><br><span class="line">plt.title(&#x27;收盘价和均线&#x27;)</span><br><span class="line">plt.legend()</span><br><span class="line"></span><br><span class="line"># 绘制仓位变化</span><br><span class="line">plt.subplot(2, 1, 2)</span><br><span class="line">plt.fill_between(price.index, price[&#x27;signal&#x27;], </span><br><span class="line">                 color=&#x27;green&#x27;, #alpha=0.5, </span><br><span class="line">                 where=(price[&#x27;signal&#x27;] == 1.0))</span><br><span class="line">plt.fill_between(price.index, price[&#x27;signal&#x27;], </span><br><span class="line">                 color=&#x27;red&#x27;, #alpha=0.5, </span><br><span class="line">                 where=(price[&#x27;signal&#x27;] == 0.0))</span><br><span class="line">plt.title(&#x27;仓位变化&#x27;)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.savefig(&#x27;图12-1.jpg&#x27;, dpi=300)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line">基于上面的代码，将持仓的收益与该股票被动持有的收益进行对比，并将对比结果可视化，请给出示例代码。</span><br></pre></td></tr></table></figure>
+
+<h2 id="答案-1"><a href="#答案-1" class="headerlink" title="答案"></a>答案</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import numpy as np</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">import matplotlib.dates as mdates</span><br><span class="line">import matplotlib.ticker as mtick</span><br><span class="line"></span><br><span class="line"># 计算移动平均线</span><br><span class="line">price[&#x27;short_mavg&#x27;] = price[&#x27;收盘&#x27;].rolling(window=20, min_periods=1).mean()</span><br><span class="line">price[&#x27;long_mavg&#x27;] = price[&#x27;收盘&#x27;].rolling(window=100, min_periods=1).mean()</span><br><span class="line"></span><br><span class="line"># 生成交易信号</span><br><span class="line">price[&#x27;signal&#x27;] = 0.0</span><br><span class="line">price[&#x27;signal&#x27;] = np.where(price[&#x27;short_mavg&#x27;] &gt; price[&#x27;long_mavg&#x27;], 1.0, 0.0)</span><br><span class="line"></span><br><span class="line"># 计算每日收益率</span><br><span class="line">price[&#x27;daily_return&#x27;] = price[&#x27;收盘&#x27;].pct_change()</span><br><span class="line"></span><br><span class="line"># 计算策略收益</span><br><span class="line">price[&#x27;strategy_position&#x27;] = price[&#x27;signal&#x27;].shift(1)  # 使用前一天的信号避免未来函数</span><br><span class="line">price[&#x27;strategy_return&#x27;] = price[&#x27;strategy_position&#x27;] * price[&#x27;daily_return&#x27;]</span><br><span class="line">price[&#x27;strategy_cumulative&#x27;] = (1 + price[&#x27;strategy_return&#x27;]).cumprod()</span><br><span class="line"></span><br><span class="line"># 计算被动持有收益</span><br><span class="line">price[&#x27;buy_hold_return&#x27;] = price[&#x27;daily_return&#x27;]</span><br><span class="line">price[&#x27;buy_hold_cumulative&#x27;] = (1 + price[&#x27;buy_hold_return&#x27;]).cumprod()</span><br><span class="line"></span><br><span class="line"># 计算累计收益</span><br><span class="line">initial_value = 10000  # 假设初始投资10000元</span><br><span class="line">price[&#x27;strategy_value&#x27;] = initial_value * price[&#x27;strategy_cumulative&#x27;]</span><br><span class="line">price[&#x27;buy_hold_value&#x27;] = initial_value * price[&#x27;buy_hold_cumulative&#x27;]</span><br><span class="line"></span><br><span class="line"># 设置绘图风格</span><br><span class="line">plt.style.use(&#x27;seaborn-v0_8&#x27;)</span><br><span class="line">#指定字体，防止中文出现乱码，windows系统指定为‘SimHei’</span><br><span class="line">plt.rcParams[&#x27;font.sans-serif&#x27;] = [&#x27;SimHei&#x27;]</span><br><span class="line">#这行代码让中文的负号“-”可以正常显示</span><br><span class="line">plt.rcParams[&quot;axes.unicode_minus&quot;]=False</span><br><span class="line"></span><br><span class="line"># 创建图表</span><br><span class="line">fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 12), dpi=300, sharex=True)</span><br><span class="line">fig.suptitle(&#x27;双均线策略 vs 被动持有收益对比&#x27;, fontsize=16, fontweight=&#x27;bold&#x27;)</span><br><span class="line"></span><br><span class="line"># 绘制价格和均线</span><br><span class="line">ax1.plot(price.index, price[&#x27;收盘&#x27;], label=&#x27;收盘价&#x27;, lw=1.2, color=&#x27;black&#x27;)</span><br><span class="line">ax1.plot(price.index, price[&#x27;short_mavg&#x27;], label=&#x27;20日均线&#x27;, lw=1.2, color=&#x27;blue&#x27;)</span><br><span class="line">ax1.plot(price.index, price[&#x27;long_mavg&#x27;], label=&#x27;100日均线&#x27;, lw=1.5, color=&#x27;red&#x27;)</span><br><span class="line">ax1.set_title(&#x27;价格走势与均线&#x27;, fontsize=12)</span><br><span class="line">ax1.set_ylabel(&#x27;价格&#x27;, fontsize=10)</span><br><span class="line">ax1.legend(loc=&#x27;upper left&#x27;, fontsize=8)</span><br><span class="line">ax1.grid(True, alpha=0.4)</span><br><span class="line"></span><br><span class="line"># 标记金叉死叉点</span><br><span class="line">gold_cross = price[(price[&#x27;short_mavg&#x27;] &gt; price[&#x27;long_mavg&#x27;]) &amp; </span><br><span class="line">                  (price[&#x27;short_mavg&#x27;].shift(1) &lt;= price[&#x27;long_mavg&#x27;].shift(1))]</span><br><span class="line">death_cross = price[(price[&#x27;short_mavg&#x27;] &lt; price[&#x27;long_mavg&#x27;]) &amp; </span><br><span class="line">                   (price[&#x27;short_mavg&#x27;].shift(1) &gt;= price[&#x27;long_mavg&#x27;].shift(1))]</span><br><span class="line"></span><br><span class="line">ax1.scatter(gold_cross.index, gold_cross[&#x27;short_mavg&#x27;], </span><br><span class="line">           marker=&#x27;^&#x27;, s=80, color=&#x27;green&#x27;, alpha=0.9, label=&#x27;金叉(买入)&#x27;)</span><br><span class="line">ax1.scatter(death_cross.index, death_cross[&#x27;short_mavg&#x27;], </span><br><span class="line">           marker=&#x27;v&#x27;, s=80, color=&#x27;red&#x27;, alpha=0.9, label=&#x27;死叉(卖出)&#x27;)</span><br><span class="line"></span><br><span class="line"># 绘制仓位变化</span><br><span class="line">ax2.fill_between(price.index, price[&#x27;signal&#x27;], </span><br><span class="line">                 color=&#x27;green&#x27;, alpha=0.3, </span><br><span class="line">                 where=(price[&#x27;signal&#x27;] == 1.0), label=&#x27;持仓&#x27;)</span><br><span class="line">ax2.fill_between(price.index, price[&#x27;signal&#x27;], </span><br><span class="line">                 color=&#x27;red&#x27;, alpha=0.3, </span><br><span class="line">                 where=(price[&#x27;signal&#x27;] == 0.0), label=&#x27;空仓&#x27;)</span><br><span class="line">ax2.set_title(&#x27;仓位变化&#x27;, fontsize=12)</span><br><span class="line">ax2.set_ylabel(&#x27;仓位状态&#x27;, fontsize=10)</span><br><span class="line">ax2.set_yticks([0, 1])</span><br><span class="line">ax2.set_yticklabels([&#x27;空仓&#x27;, &#x27;持仓&#x27;])</span><br><span class="line">ax2.legend(loc=&#x27;upper left&#x27;, fontsize=8)</span><br><span class="line"></span><br><span class="line"># 绘制收益对比</span><br><span class="line">ax3.plot(price.index, price[&#x27;strategy_value&#x27;], </span><br><span class="line">         label=&#x27;双均线策略&#x27;, lw=1.8, color=&#x27;darkgreen&#x27;)</span><br><span class="line">ax3.plot(price.index, price[&#x27;buy_hold_value&#x27;], </span><br><span class="line">         label=&#x27;被动持有&#x27;, lw=1.8, color=&#x27;blue&#x27;, alpha=0.7)</span><br><span class="line">ax3.set_title(&#x27;收益对比 (初始投资: ¥10,000)&#x27;, fontsize=12)</span><br><span class="line">ax3.set_ylabel(&#x27;账户价值 (¥)&#x27;, fontsize=10)</span><br><span class="line">ax3.set_xlabel(&#x27;日期&#x27;, fontsize=10)</span><br><span class="line">ax3.legend(loc=&#x27;upper left&#x27;, fontsize=8)</span><br><span class="line">ax3.grid(True, alpha=0.4)</span><br><span class="line"></span><br><span class="line"># 添加最终收益标注</span><br><span class="line">final_strategy = price[&#x27;strategy_value&#x27;].iloc[-1]</span><br><span class="line">final_buy_hold = price[&#x27;buy_hold_value&#x27;].iloc[-1]</span><br><span class="line">strategy_return_pct = (final_strategy - initial_value) / initial_value * 100</span><br><span class="line">buy_hold_return_pct = (final_buy_hold - initial_value) / initial_value * 100</span><br><span class="line"></span><br><span class="line">ax3.annotate(f&#x27;策略最终收益: ¥&#123;final_strategy:,.2f&#125; (&#123;strategy_return_pct:.1f&#125;%)&#x27;,</span><br><span class="line">            xy=(price.index[-1], final_strategy),</span><br><span class="line">            xytext=(price.index[-1] - pd.DateOffset(months=6), final_strategy * 0.8),</span><br><span class="line">            arrowprops=dict(facecolor=&#x27;black&#x27;, shrink=0.05),</span><br><span class="line">            fontsize=9)</span><br><span class="line"></span><br><span class="line">ax3.annotate(f&#x27;被动持有收益: ¥&#123;final_buy_hold:,.2f&#125; (&#123;buy_hold_return_pct:.1f&#125;%)&#x27;,</span><br><span class="line">            xy=(price.index[-1], final_buy_hold),</span><br><span class="line">            xytext=(price.index[-1] - pd.DateOffset(months=6), final_buy_hold * 1.2),</span><br><span class="line">            arrowprops=dict(facecolor=&#x27;black&#x27;, shrink=0.05),</span><br><span class="line">            fontsize=9)</span><br><span class="line"></span><br><span class="line"># 设置x轴日期格式</span><br><span class="line">ax3.xaxis.set_major_locator(mdates.MonthLocator(interval=3))</span><br><span class="line">ax3.xaxis.set_major_formatter(mdates.DateFormatter(&#x27;%Y-%m&#x27;))</span><br><span class="line">plt.xticks(rotation=45, ha=&#x27;right&#x27;)</span><br><span class="line"></span><br><span class="line"># 调整布局</span><br><span class="line">plt.tight_layout(rect=[0, 0, 1, 0.96])  # 为总标题留空间</span><br><span class="line">plt.subplots_adjust(hspace=0.2)  # 调整子图间距</span><br><span class="line"></span><br><span class="line"># 添加统计信息表格</span><br><span class="line">stats_data = [</span><br><span class="line">    [&quot;累计收益率&quot;, f&quot;&#123;strategy_return_pct:.1f&#125;%&quot;, f&quot;&#123;buy_hold_return_pct:.1f&#125;%&quot;],</span><br><span class="line">    [&quot;年化收益率&quot;, </span><br><span class="line">     f&quot;&#123;(price[&#x27;strategy_cumulative&#x27;].iloc[-1] ** (252/len(price)) - 1) * 100:.1f&#125;%&quot;,</span><br><span class="line">     f&quot;&#123;(price[&#x27;buy_hold_cumulative&#x27;].iloc[-1] ** (252/len(price)) - 1) * 100:.1f&#125;%&quot;],</span><br><span class="line">    [&quot;最大回撤&quot;, </span><br><span class="line">     f&quot;&#123;((price[&#x27;strategy_value&#x27;].cummax() - price[&#x27;strategy_value&#x27;]).max() / initial_value * 100):.1f&#125;%&quot;,</span><br><span class="line">     f&quot;&#123;((price[&#x27;buy_hold_value&#x27;].cummax() - price[&#x27;buy_hold_value&#x27;]).max() / initial_value * 100):.1f&#125;%&quot;],</span><br><span class="line">    [&quot;交易次数&quot;, f&quot;&#123;len(gold_cross) + len(death_cross)&#125;次&quot;, &quot;-&quot;],</span><br><span class="line">    [&quot;持仓时间占比&quot;, f&quot;&#123;price[&#x27;signal&#x27;].mean() * 100:.1f&#125;%&quot;, &quot;100%&quot;]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">table = plt.table(cellText=stats_data,</span><br><span class="line">                 colLabels=[&#x27;指标&#x27;, &#x27;双均线策略&#x27;, &#x27;被动持有&#x27;],</span><br><span class="line">                 loc=&#x27;bottom&#x27;,</span><br><span class="line">                 bbox=[0, -0.5, 1, 0.3])</span><br><span class="line"></span><br><span class="line">table.auto_set_font_size(False)</span><br><span class="line">table.set_fontsize(10)</span><br><span class="line">table.scale(1, 1.5)</span><br><span class="line"></span><br><span class="line"># 保存和显示</span><br><span class="line">plt.savefig(&#x27;收益对比分析.jpg&#x27;, dpi=300, bbox_inches=&#x27;tight&#x27;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>结果：<br><img src="https://roim-picx-bpc.pages.dev/rest/zbotnuK.png"><br>交易策略最后收益还不如一直持有，要调整。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2025/06/30/AI%E4%BC%B0%E8%AE%A1%E6%8A%95%E8%B5%84%E7%BB%84%E5%90%88%E7%9A%84VaR/">AI估计投资组合的VaR</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2025/06/30/AI%E8%AF%84%E4%BC%B0%E7%AD%89%E6%9D%83%E9%87%8D%E6%8A%95%E8%B5%84%E7%BB%84%E5%90%88/">AI评估等权重投资组合</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="toc-text">提示词</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AD%94%E6%A1%88"><span class="toc-text">答案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E4%BA%A4%E6%98%93%E7%AD%96%E7%95%A5%E7%9A%84%E6%94%B6%E7%9B%8A"><span class="toc-text">计算交易策略的收益</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D-1"><span class="toc-text">提示词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%94%E6%A1%88-1"><span class="toc-text">答案</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

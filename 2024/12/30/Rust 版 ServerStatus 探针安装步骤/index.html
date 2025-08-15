@@ -1,0 +1,937 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Rust 版 ServerStatus 探针安装步骤 - Hexo</title>
+
+  
+    <meta name="description" content="背景之前用的探针nezha升级到v1了，刚好想着换一个其他的看看。 看了一圈，选中了ServerStatus-Rust。 先停掉nezhadashboard和agent 都在下面，自选 12345678910111213141516171819202122232425262728#自带的卸载先来一遍.&#x2F;nezha.sh stop_dashboard.&#x2F;nezha.sh uninstall_dash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rust 版 ServerStatus 探针安装步骤">
+<meta property="og:url" content="http://example.com/2024/12/30/Rust%20%E7%89%88%20ServerStatus%20%E6%8E%A2%E9%92%88%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4/">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景之前用的探针nezha升级到v1了，刚好想着换一个其他的看看。 看了一圈，选中了ServerStatus-Rust。 先停掉nezhadashboard和agent 都在下面，自选 12345678910111213141516171819202122232425262728#自带的卸载先来一遍.&#x2F;nezha.sh stop_dashboard.&#x2F;nezha.sh uninstall_dash">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/G6dWhMK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/wpEYhMK.png">
+<meta property="article:published_time" content="2024-12-30T12:25:22.000Z">
+<meta property="article:modified_time" content="2025-08-15T13:31:56.022Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://roim-picx-bpc.pages.dev/rest/G6dWhMK.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2024-12-30T20:25:22+08:00","dateModified":"2025-08-15T21:31:56+08:00","datePublished":"2024-12-30T20:25:22+08:00","description":"","headline":"Rust 版 ServerStatus 探针安装步骤","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/12/30/Rust%20%E7%89%88%20ServerStatus%20%E6%8E%A2%E9%92%88%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2024/12/30/Rust%20%E7%89%88%20ServerStatus%20%E6%8E%A2%E9%92%88%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4/","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/08/11/%E5%AE%9D%E5%A1%94%E9%83%A8%E7%BD%B2message-pusher/"><span class="title">宝塔部署message-pusher</span></a><a class="item title" href="/2025/07/27/pine%E7%89%88%E6%9C%AC5%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%89%88%E6%9C%AC6%E5%90%8E%EF%BC%8C%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7%E5%8F%98%E5%A4%9A%E4%BA%86%EF%BC%9F/"><span class="title">pine版本5转换为版本6后，交易信号变多了？</span></a><a class="item title" href="/2025/07/21/pine%20%E7%AD%96%E7%95%A5%E4%BA%A4%E6%98%93%E6%98%BE%E7%A4%BAlabel/"><span class="title">pine 策略交易显示label</span></a><a class="item title" href="/2025/07/20/pine%E6%9B%BF%E4%BB%A3ifelse%E7%9A%84switch%E8%AF%AD%E6%B3%95/"><span class="title">pine替代ifelse的switch语法</span></a><a class="item title" href="/2025/07/20/pine%E5%A4%9A%E5%B8%81%E7%A7%8D%E7%AD%96%E7%95%A5%E8%AD%A6%E6%8A%A5/"><span class="title">pine多币种策略警报</span></a><a class="item title" href="/2025/07/19/pine%E5%9B%BE%E4%B8%AD%E6%A0%87%E7%AD%BE%E5%88%B6%E4%BD%9C%E5%8F%8A%E7%BE%8E%E5%8C%96/"><span class="title">pine图中标签制作及美化</span></a><a class="item title" href="/2025/07/18/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5/"><span class="title">pine多指标选择策略</span></a><a class="item title" href="/2025/07/17/pine%E7%89%88%E6%9C%AC6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E6%94%AF%E6%8C%81%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/"><span class="title">pine版本6自定义函数支持命名参数传递</span></a><a class="item title" href="/2025/07/17/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E5%BB%BA%E7%AB%8B%E8%AD%A6%E6%8A%A5/"><span class="title">pine多指标建立警报</span></a><a class="item title" href="/2025/07/09/%E5%BC%80%E9%80%9A%E6%90%AC%E7%93%A6%E5%B7%A5%E7%A7%AF%E5%88%86/"><span class="title">开通搬瓦工积分</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2024-12-30T12:25:22.000Z">2024-12-30</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-08-15T13:31:56.022Z">2025-08-15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Rust 版 ServerStatus 探针安装步骤</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>之前用的探针nezha升级到v1了，刚好想着换一个其他的看看。</p>
+<p>看了一圈，选中了<a target="_blank" rel="noopener" href="https://github.com/zdz/ServerStatus-Rust">ServerStatus-Rust</a>。</p>
+<h1 id="先停掉nezha"><a href="#先停掉nezha" class="headerlink" title="先停掉nezha"></a>先停掉nezha</h1><p>dashboard和agent 都在下面，自选</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#自带的卸载先来一遍</span><br><span class="line">./nezha.sh stop_dashboard</span><br><span class="line">./nezha.sh uninstall_dashboard</span><br><span class="line">./nezha.sh uninstall_agent</span><br><span class="line"></span><br><span class="line"># 停止哪吒服務</span><br><span class="line">systemctl stop nezha-agent</span><br><span class="line">systemctl stop nezha-dashboard</span><br><span class="line"></span><br><span class="line"># 禁用服務</span><br><span class="line">systemctl disable nezha-agent</span><br><span class="line">systemctl disable nezha-dashboard</span><br><span class="line"></span><br><span class="line"># 刪除服務檔案</span><br><span class="line">rm -f /etc/systemd/system/nezha-agent.service</span><br><span class="line">rm -f /etc/systemd/system/nezha-dashboard.service</span><br><span class="line"></span><br><span class="line"># 刪除程式文件</span><br><span class="line">rm -rf /opt/nezha</span><br><span class="line">rm -rf /etc/nezha</span><br><span class="line"></span><br><span class="line"># 刪除日誌文件</span><br><span class="line">rm -rf /var/log/nezha</span><br><span class="line"></span><br><span class="line"># 重新載入 systemd</span><br><span class="line">systemctl daemon-reload</span><br><span class="line"></span><br><span class="line">echo &quot;哪吒面板已完全移除&quot;</span><br></pre></td></tr></table></figure>
+
+<h1 id="基础条件"><a href="#基础条件" class="headerlink" title="基础条件"></a>基础条件</h1><p><code>面板准备搭建在centos上 适用系统：centos，其他发行版按流程稍改命令一般也可。</code></p>
+<ol>
+<li>一个域名解析到作为服务端机子的ip上，比如 yuming.com。既可用于web端界面访问，也可用于客户端联系服务端。</li>
+</ol>
+<p>之前的nezha我使用了两个域名，这个rust探针只需要1个，不错哦。</p>
+<ol start="2">
+<li>VPS 的网络可以访问GitHub</li>
+</ol>
+<h1 id="开始安装-ServerStatus-Rust"><a href="#开始安装-ServerStatus-Rust" class="headerlink" title="开始安装 ServerStatus-Rust"></a>开始安装 ServerStatus-Rust</h1><p>确保安装了一些软件工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y curl unzip</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-ServerStatus-服务端"><a href="#1-ServerStatus-服务端" class="headerlink" title="1. ServerStatus 服务端"></a>1. ServerStatus 服务端</h2><p>先开启防火墙</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#sudo systemctl start firewalld</span><br><span class="line">#sudo systemctl enable firewalld</span><br><span class="line">systemctl status firewalld # 查看防火墙状态</span><br><span class="line">sudo firewall-cmd --list-ports # 查看是否已开启了8080和9394 #如果冲突可以修改为38080 39394</span><br><span class="line">sudo firewall-cmd --zone=public --add-port=8080/tcp --permanent</span><br><span class="line">sudo firewall-cmd --zone=public --add-port=9394/tcp --permanent</span><br><span class="line">sudo firewall-cmd --reload</span><br><span class="line">sudo firewall-cmd --list-ports# 检查是否开启了8080和9394</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-配置服务端"><a href="#2-配置服务端" class="headerlink" title="2. 配置服务端"></a>2. 配置服务端</h2><p>作为服务端的机器，除了要安装 ServerStatus-Rust 的服务端，还需要安装客户端。<br>serverstatus 结构，客户端主动上报服务端：<br><img src="https://roim-picx-bpc.pages.dev/rest/G6dWhMK.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">adduser masker # 创建一个用户后期运行systemd</span><br><span class="line">passwd masker # 设置密码</span><br><span class="line">usermod -aG wheel masker # 将masker添加到sudoer 方便后续执行sudo</span><br><span class="line"></span><br><span class="line">su masker #切换为masker配置</span><br></pre></td></tr></table></figure>
+
+<p>获取机器架构，查找最新版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># get_architecture</span><br><span class="line">arch=$(uname -m)</span><br><span class="line"># 设置 ARCHITECTURE 变量</span><br><span class="line">if [[ $arch == &quot;aarch64&quot; ]]; then</span><br><span class="line">    ARCHITECTURE=&quot;aarch64&quot;</span><br><span class="line">elif [[ $arch == &quot;x86_64&quot; ]]; then</span><br><span class="line">    ARCHITECTURE=&quot;x86_64&quot;</span><br><span class="line">else</span><br><span class="line">    ARCHITECTURE=&quot;unknown&quot;</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">github_project=&quot;zdz/ServerStatus-Rust&quot;</span><br><span class="line">tag=$(curl -m 10 -sL &quot;https://api.github.com/repos/$github_project/releases/latest&quot; | grep &quot;tag_name&quot; | head -n 1 | awk -F &quot;:&quot; &#x27;&#123;print $2&#125;&#x27; | sed &#x27;s/\&quot;//g;s/,//g;s/ //g&#x27;)</span><br><span class="line">echo $&#123;tag&#125;</span><br><span class="line"># 返回 v1.8.1</span><br></pre></td></tr></table></figure>
+
+<p>这个变量tag后续也会用到。</p>
+<p>创建安装目录（比如用家目录下的 myserve&#x2F;serverstatus）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p ~/myserve/serverstatus &amp;&amp; cd ~/myserve/serverstatus</span><br></pre></td></tr></table></figure>
+
+<h3 id="下载和解压服务端"><a href="#下载和解压服务端" class="headerlink" title="下载和解压服务端"></a>下载和解压服务端</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https://github.com/zdz/ServerStatus-Rust/releases/download/$&#123;tag&#125;/server-$&#123;ARCHITECTURE&#125;-unknown-linux-musl.zip &amp;&amp; \</span><br><span class="line">unzip -o &quot;server-$&#123;ARCHITECTURE&#125;-unknown-linux-musl.zip&quot; &amp;&amp; \</span><br><span class="line">rm &quot;server-$&#123;ARCHITECTURE&#125;-unknown-linux-musl.zip&quot; -f</span><br></pre></td></tr></table></figure>
+
+<h3 id="下载和解压客户端"><a href="#下载和解压客户端" class="headerlink" title="下载和解压客户端"></a>下载和解压客户端</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https://github.com/zdz/ServerStatus-Rust/releases/download/$&#123;tag&#125;/client-$&#123;ARCHITECTURE&#125;-unknown-linux-musl.zip &amp;&amp; \</span><br><span class="line">unzip -o &quot;client-$&#123;ARCHITECTURE&#125;-unknown-linux-musl.zip&quot; &amp;&amp; \</span><br><span class="line">rm &quot;client-$&#123;ARCHITECTURE&#125;-unknown-linux-musl.zip&quot; -f</span><br></pre></td></tr></table></figure>
+
+<p>进入工作目录，编辑服务端的配置文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/myserve/serverstatus </span><br><span class="line">rm -f config.toml #删除默认的</span><br><span class="line">sudo vi config.toml</span><br></pre></td></tr></table></figure>
+
+<p>输入以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># 默认安装的路径</span><br><span class="line">workspace = &quot;/home/masker/myserve/serverstatus&quot;</span><br><span class="line"></span><br><span class="line"># 侦听地址, ipv6 使用 [::]:9394 #可以自定义</span><br><span class="line">grpc_addr = &quot;0.0.0.0:9394&quot;</span><br><span class="line">http_addr = &quot;0.0.0.0:8080&quot;</span><br><span class="line"># 默认30s无上报判定下线</span><br><span class="line">offline_threshold = 30</span><br><span class="line"></span><br><span class="line"># 管理员账号,不设置的话，默认随机生成，用于查看 /detail, /map，自行修改</span><br><span class="line">admin_user = &quot;admin_user&quot;</span><br><span class="line">admin_pass = &quot;112233&quot;</span><br><span class="line"></span><br><span class="line">hosts = [</span><br><span class="line">  &#123;name = &quot;vfly2bwg&quot;, password = &quot;123456&quot;, alias = &quot;Bwg&quot;, location = &quot;US&quot;, type = &quot;KVM&quot;, labels = &quot;os=debian;ndd=2024/1/15;spec=2C/2G/40G;&quot;&#125;,</span><br><span class="line">  &#123;name = &quot;vfly2ht&quot;, password = &quot;123456&quot;, alias = &quot;HT&quot;, location = &quot;TR&quot;, type = &quot;VMware&quot;, labels = &quot;os=debian;ndd=2024/3/28;spec=1C/1G/20G;&quot;&#125;,</span><br><span class="line">  &#123;name = &quot;vfly2as&quot;, password = &quot;123456&quot;, alias = &quot;alongserver&quot;, location = &quot;AS&quot;, type = &quot;arm&quot;, labels = &quot;os=arch;ndd=2029/11/25;spec=4C/2G/14G;&quot;, notify = false&#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"># 告警间隔默认为30s</span><br><span class="line">notify_interval = 30</span><br><span class="line"></span><br><span class="line">[tgbot]</span><br><span class="line"># 开关 true 已打开 不需要则改为false</span><br><span class="line">enabled = true</span><br><span class="line">bot_token = &quot;&lt;tg bot token&gt;&quot;</span><br><span class="line">chat_id = &quot;&lt;chat id&gt;&quot;</span><br><span class="line"></span><br><span class="line">title = &quot;❗&lt;b&gt;Server Status&lt;/b&gt;&quot;</span><br><span class="line">online_tpl =  &quot;&#123;&#123;config.title&#125;&#125; \n😆 &#123;&#123;host.location&#125;&#125; &#123;&#123;host.alias&#125;&#125; 主机恢复上线啦&quot;</span><br><span class="line">offline_tpl = &quot;&#123;&#123;config.title&#125;&#125; \n😱 &#123;&#123;host.location&#125;&#125; &#123;&#123;host.alias&#125;&#125; 主机已经掉线啦&quot;</span><br><span class="line">custom_tpl = &quot;&quot;&quot;&quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>保存退出。</p>
+<p>其中必须要自定义的的变量： workspace、admin_user 和 admin_pass、hosts，其他可以不管，不影响基本使用。</p>
+<p>详细说明参考<a target="_blank" rel="noopener" href="https://doc.ssr.rs/server/#1-configtoml">https://doc.ssr.rs/server/#1-configtoml</a></p>
+<h3 id="测试配置文件是否有效"><a href="#测试配置文件是否有效" class="headerlink" title="测试配置文件是否有效"></a>测试配置文件是否有效</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./stat_server -c config.toml -t</span><br></pre></td></tr></table></figure>
+
+<p>返回如下则成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">✨ the conf file config.toml syntax is ok</span><br><span class="line">✨ the conf file config.toml test is successful</span><br></pre></td></tr></table></figure>
+
+<h3 id="根据配置发送测试消息，验证通知是否生效"><a href="#根据配置发送测试消息，验证通知是否生效" class="headerlink" title="根据配置发送测试消息，验证通知是否生效"></a>根据配置发送测试消息，验证通知是否生效</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./stat_server -c config.toml --notify-test</span><br></pre></td></tr></table></figure>
+
+<p>返回如下则成功</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">✨ run in normal mode, load conf from local file `config.toml</span><br><span class="line">✨ admin_user: admin_user</span><br><span class="line">✨ admin_pass: 112233</span><br><span class="line">Please check for notifications</span><br></pre></td></tr></table></figure>
+
+<h3 id="服务端运行"><a href="#服务端运行" class="headerlink" title="服务端运行"></a>服务端运行</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./stat_server -c config.toml</span><br></pre></td></tr></table></figure>
+
+<p>这时，如果没有出错，访问 IP:8080 即可看到 Web 网页。我们也可以配置反向代理如下，去掉端口尾巴</p>
+<h2 id="3-配置反向代理"><a href="#3-配置反向代理" class="headerlink" title="3. 配置反向代理"></a>3. 配置反向代理</h2><p>在宝塔面板中新建一个站点，域名填写公开访问域名，如 “yuming.com“ ，然后点击“设置”进入站点设置选项，选择“反向代理” - “新建反向代理”</p>
+<p>自定义一个代理名称，在下方“目标 URL”中填入 <a target="_blank" rel="noopener" href="http://127.0.0.1/">http://127.0.0.1</a> 然后点击“保存”</p>
+<p>打开刚刚新建的反向代理右边的“配置文件”，将配置文件替换为以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#PROXY-START/</span><br><span class="line">location / &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:8080;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">    proxy_set_header      Upgrade $http_upgrade;</span><br><span class="line">&#125;</span><br><span class="line">location ~ ^/(ws|terminal/.+)$  &#123;</span><br><span class="line">    proxy_pass http://127.0.0.1:8080;</span><br><span class="line">    proxy_http_version 1.1;</span><br><span class="line">    proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">    proxy_set_header Connection &quot;Upgrade&quot;;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">&#125;</span><br><span class="line">#PROXY-END/</span><br></pre></td></tr></table></figure>
+
+<p>点击“保存”现在，你应该可以直接使用域名，如：“yuming.com“ 来访问面板了。</p>
+<p>和IP:8080页面是一样的</p>
+<p>不过，很明显，现在如果断开 SSH 连接，服务端也就不运行了，使用 systemd 守护进程解决这个问题，具体内容请往下看。</p>
+<p>若想查看地图，访问 yuming.com&#x2F;map</p>
+<p>刚才测试的是站点开启过程，退出ssh就会消失。</p>
+<p>下面我们让探针一直后台运行</p>
+<h1 id="让服务一直运行"><a href="#让服务一直运行" class="headerlink" title="让服务一直运行"></a>让服务一直运行</h1><h2 id="1-服务端"><a href="#1-服务端" class="headerlink" title="1. 服务端"></a>1. 服务端</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/systemd/system/stat_server.service</span><br></pre></td></tr></table></figure>
+
+<p>注意修改 User、Group、WorkingDirectory、ExecStart</p>
+<p>插入以下内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=ServerStatus-Rust Server</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=masker</span><br><span class="line">Group=masker</span><br><span class="line">Environment=&quot;RUST_BACKTRACE=1&quot;</span><br><span class="line">WorkingDirectory=/home/masker/myserve/serverstatus</span><br><span class="line">ExecStart=/home/masker/myserve/serverstatus/stat_server -c /home/masker/myserve/serverstatus/config.toml</span><br><span class="line">ExecReload=/bin/kill -HUP \$MAINPID</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<p>加载配置<br><code>sudo systemctl daemon-reload</code><br>开机自启，立即启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable --now stat_server</span><br><span class="line"># 其余命令，有需要自取</span><br><span class="line">sudo systemctl stop stat_server</span><br><span class="line">sudo systemctl start stat_server</span><br><span class="line">sudo systemctl restart stat_server</span><br><span class="line">sudo systemctl status stat_server</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-客户端"><a href="#2-客户端" class="headerlink" title="2. 客户端"></a>2. 客户端</h2><p>客户端就1个接1个配置了。</p>
+<p>添加新的一个服务器都一个流程：<br><code>添加普通用户masker、下载client文件、再配置Systemd 守护进程</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/systemd/system/stat_client.service</span><br></pre></td></tr></table></figure>
+
+<p>注意修改 User、Group、WorkingDirectory、ExecStart<br>插入以下内容</p>
+<p>其中ExecStart -u和-p则是服务端的配置文件中写的，所以name（不能重复），它对应u，password对应p</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=ServerStatus-Rust Client</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=masker</span><br><span class="line">Group=masker</span><br><span class="line">Environment=&quot;RUST_BACKTRACE=1&quot;</span><br><span class="line">WorkingDirectory=/home/masker/myserve/serverstatus</span><br><span class="line">ExecStart=/home/masker/myserve/serverstatus/stat_client -a &quot;https://yuming.com/report&quot; -u vfly2bwg -p 123456</span><br><span class="line">ExecReload=/bin/kill -HUP \$MAINPID</span><br><span class="line">Restart=on-failure</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure>
+
+<p>加载配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br></pre></td></tr></table></figure>
+
+<p>开机自启，立即启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable --now stat_client</span><br><span class="line"># 其余命令，有需要自取</span><br><span class="line">sudo systemctl stop stat_client</span><br><span class="line">sudo systemctl start stat_client</span><br><span class="line">sudo systemctl restart stat_client</span><br><span class="line">sudo systemctl status stat_client</span><br></pre></td></tr></table></figure>
+
+<p>查看日志<br><code>journalctl -u stat_client -f -n 100</code></p>
+<h1 id="部署过程遇到的问题"><a href="#部署过程遇到的问题" class="headerlink" title="部署过程遇到的问题"></a>部署过程遇到的问题</h1><h2 id="1-域名反代cf"><a href="#1-域名反代cf" class="headerlink" title="1. 域名反代cf"></a>1. 域名反代cf</h2><p>部署没有问题，本来 <code>stat_client.service</code>写的是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/home/masker/myserve/serverstatus/stat_client -a &quot;https://yuming.com/report&quot;</span><br></pre></td></tr></table></figure>
+
+<p>访问域名一直转圈<br><code>sudo systemctl status stat_client</code>也看不出来</p>
+<p>网页打开开发者工具看到stats.json一直有刷新抓取，但是就是转圈。</p>
+<p>突然想起来域名开启了cf的小黄云，之前就有http跳https的循环报错，具体原理忘记是啥了。</p>
+<p>修改为</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExecStart=/home/masker/myserve/serverstatus/stat_client -a &quot;https://yuming.com/report&quot;</span><br></pre></td></tr></table></figure>
+
+<p>更新配置文件，重启client</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart stat_client</span><br></pre></td></tr></table></figure>
+
+<p>发现网页正常了。<br><img src="https://roim-picx-bpc.pages.dev/rest/wpEYhMK.png" alt="30.png"></p>
+<p>开始1个接1个配置其他小鸡客户端了。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2025/01/04/Linux%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8%E6%B7%BB%E5%8A%A0%E6%96%B0%E7%94%A8%E6%88%B7%E5%90%8E%EF%BC%8C%E6%B2%A1%E6%9C%89%E7%94%A8%E6%88%B7%E7%9B%AE%E5%BD%95%EF%BC%88%E6%B2%A1%E6%9C%89home%EF%BC%89%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95/">Linux系统使用添加新用户后，没有用户目录（没有home）解决办法</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2024/12/30/%E8%BF%90%E8%A1%8Cshell%E8%84%9A%E6%9C%AC%E6%97%B6%E6%8A%A5%E9%94%99_%5B%5B%20_%20not%20found_%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/">运行shell脚本时报错_[[ _ not found_解决方法</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%88%E5%81%9C%E6%8E%89nezha"><span class="toc-text">先停掉nezha</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%9D%A1%E4%BB%B6"><span class="toc-text">基础条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85-ServerStatus-Rust"><span class="toc-text">开始安装 ServerStatus-Rust</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-ServerStatus-%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-text">1. ServerStatus 服务端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-text">2. 配置服务端</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%92%8C%E8%A7%A3%E5%8E%8B%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-text">下载和解压服务端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8B%E8%BD%BD%E5%92%8C%E8%A7%A3%E5%8E%8B%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text">下载和解压客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%98%AF%E5%90%A6%E6%9C%89%E6%95%88"><span class="toc-text">测试配置文件是否有效</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B9%E6%8D%AE%E9%85%8D%E7%BD%AE%E5%8F%91%E9%80%81%E6%B5%8B%E8%AF%95%E6%B6%88%E6%81%AF%EF%BC%8C%E9%AA%8C%E8%AF%81%E9%80%9A%E7%9F%A5%E6%98%AF%E5%90%A6%E7%94%9F%E6%95%88"><span class="toc-text">根据配置发送测试消息，验证通知是否生效</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%BF%90%E8%A1%8C"><span class="toc-text">服务端运行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-text">3. 配置反向代理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A9%E6%9C%8D%E5%8A%A1%E4%B8%80%E7%9B%B4%E8%BF%90%E8%A1%8C"><span class="toc-text">让服务一直运行</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-text">1. 服务端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text">2. 客户端</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E8%BF%87%E7%A8%8B%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">部署过程遇到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%9F%E5%90%8D%E5%8F%8D%E4%BB%A3cf"><span class="toc-text">1. 域名反代cf</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

@@ -1,0 +1,931 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Cursor MCP Server 配置与使用指南（Window） - Hexo</title>
+
+  
+    <meta name="description" content="背景cursor配置mcp，win10 之前用过nvm管理nodejs 本文将详细介绍如何安装、配置和使用 Cursor MCP Server，包括常见问题的排查和注意事项。通过本文的指导，您可以快速上手并高效使用 MCP Server 提供的强大功能。 一、环境准备在开始安装 MCP Server 之前，请确保您的开发环境满足以下要求： 卸载旧版本的 Node.js：如果您的电脑上已经安装了旧版">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cursor MCP Server 配置与使用指南（Window）">
+<meta property="og:url" content="http://example.com/2025/04/28/Cursor%20MCP%20Server%20%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%88Window%EF%BC%89/">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="背景cursor配置mcp，win10 之前用过nvm管理nodejs 本文将详细介绍如何安装、配置和使用 Cursor MCP Server，包括常见问题的排查和注意事项。通过本文的指导，您可以快速上手并高效使用 MCP Server 提供的强大功能。 一、环境准备在开始安装 MCP Server 之前，请确保您的开发环境满足以下要求： 卸载旧版本的 Node.js：如果您的电脑上已经安装了旧版">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmRVdocffBdNhTrSqFT8ZWc2aamgmhK6upzyXVPfYz3hZ3">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmahA2HwG1RdsmL8WT9uTst9wYCfjtbm1Dj6MLQD2hX2D7">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmZ5Ff7GMB8RWjzSqukTboXfHuodNQBqbvwzUvVtwwTiBQ">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmdH122toeZTGtPjirGBeMKfckg4d5iMkh57QNAQuBwuhR">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmUKpBfaQrbjzRxtueG2c3mfRrCqSpkFphTi4WzWD9NQj6">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmYXyyHT7EQsUMtxjeAu8QDFPMiqbyUL9EtfxUwJiTsKJT">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmRU4WoR34znGNDHg8TSpCpcpja4D3xme9cm42gtHZVD4c">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmdUPpzM27ZeLT6t5A3Y1N6Cj5h5qEBkGvHfSPbTtHqvUg">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmP94Yhbzkummhk5GzE5mJSmng7zzZ5bEW3HzjNUZ9HpkF">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmTP7taH3UBDwsmEY2sCtJBXwZiMEb8AB4PoirEGNXFAuh">
+<meta property="og:image" content="https://ipfs.io/ipfs/QmSS9P6rXou6BRmuzsttdpAKVtfXHKixQk32bW9h2iJZa3">
+<meta property="article:published_time" content="2025-04-28T12:25:22.000Z">
+<meta property="article:modified_time" content="2025-08-15T13:45:07.953Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ipfs.io/ipfs/QmRVdocffBdNhTrSqFT8ZWc2aamgmhK6upzyXVPfYz3hZ3">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2025-04-28T20:25:22+08:00","dateModified":"2025-08-15T21:45:07+08:00","datePublished":"2025-04-28T20:25:22+08:00","description":"","headline":"Cursor MCP Server 配置与使用指南（Window）","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/04/28/Cursor%20MCP%20Server%20%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%88Window%EF%BC%89/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2025/04/28/Cursor%20MCP%20Server%20%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%88Window%EF%BC%89/","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/08/11/%E5%AE%9D%E5%A1%94%E9%83%A8%E7%BD%B2message-pusher/"><span class="title">宝塔部署message-pusher</span></a><a class="item title" href="/2025/07/27/pine%E7%89%88%E6%9C%AC5%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%89%88%E6%9C%AC6%E5%90%8E%EF%BC%8C%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7%E5%8F%98%E5%A4%9A%E4%BA%86%EF%BC%9F/"><span class="title">pine版本5转换为版本6后，交易信号变多了？</span></a><a class="item title" href="/2025/07/21/pine%20%E7%AD%96%E7%95%A5%E4%BA%A4%E6%98%93%E6%98%BE%E7%A4%BAlabel/"><span class="title">pine 策略交易显示label</span></a><a class="item title" href="/2025/07/20/pine%E6%9B%BF%E4%BB%A3ifelse%E7%9A%84switch%E8%AF%AD%E6%B3%95/"><span class="title">pine替代ifelse的switch语法</span></a><a class="item title" href="/2025/07/20/pine%E5%A4%9A%E5%B8%81%E7%A7%8D%E7%AD%96%E7%95%A5%E8%AD%A6%E6%8A%A5/"><span class="title">pine多币种策略警报</span></a><a class="item title" href="/2025/07/19/pine%E5%9B%BE%E4%B8%AD%E6%A0%87%E7%AD%BE%E5%88%B6%E4%BD%9C%E5%8F%8A%E7%BE%8E%E5%8C%96/"><span class="title">pine图中标签制作及美化</span></a><a class="item title" href="/2025/07/18/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5/"><span class="title">pine多指标选择策略</span></a><a class="item title" href="/2025/07/17/pine%E7%89%88%E6%9C%AC6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E6%94%AF%E6%8C%81%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/"><span class="title">pine版本6自定义函数支持命名参数传递</span></a><a class="item title" href="/2025/07/17/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E5%BB%BA%E7%AB%8B%E8%AD%A6%E6%8A%A5/"><span class="title">pine多指标建立警报</span></a><a class="item title" href="/2025/07/09/%E5%BC%80%E9%80%9A%E6%90%AC%E7%93%A6%E5%B7%A5%E7%A7%AF%E5%88%86/"><span class="title">开通搬瓦工积分</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2025-04-28T12:25:22.000Z">2025-04-28</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-08-15T13:45:07.953Z">2025-08-15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Cursor MCP Server 配置与使用指南（Window）</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>cursor配置mcp，win10</p>
+<p>之前用过nvm管理nodejs</p>
+<p>本文将详细介绍如何安装、配置和使用 Cursor MCP Server，包括常见问题的排查和注意事项。通过本文的指导，您可以快速上手并高效使用 MCP Server 提供的强大功能。</p>
+<h1 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h1><p>在开始安装 MCP Server 之前，请确保您的开发环境满足以下要求：</p>
+<p>卸载旧版本的 Node.js：如果您的电脑上已经安装了旧版本的 Node.js，建议先卸载以避免版本冲突。</p>
+<p>安装最新 LTS 版本的 Node.js：下载并安装 Node.js 的长期支持（LTS）版本，以确保兼容性和稳定性。</p>
+<p>重启电脑：安装完成后，建议重启电脑以确保环境变量生效。</p>
+<p>注，版本合适不需要卸载重装</p>
+<h1 id="二、验证环境"><a href="#二、验证环境" class="headerlink" title="二、验证环境"></a>二、验证环境</h1><p>完成环境准备后，需要验证 Node.js 和 npm 是否正确安装。步骤如下：</p>
+<ol>
+<li>打开 CMD（注意：不是 PowerShell）。</li>
+<li>输入以下命令，检查版本号是否正确显示：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node --version</span><br><span class="line">npm --version</span><br></pre></td></tr></table></figure>
+
+<p>如果能够看到版本号，说明安装成功。<br><img src="https://ipfs.io/ipfs/QmRVdocffBdNhTrSqFT8ZWc2aamgmhK6upzyXVPfYz3hZ3"><br>可以看到我使用的node14版本(后续发现版本不行)，切换去22.15.0。<br><code>nvm use 22.15.0</code></p>
+<h1 id="三、常见-MCP-Server-的安装与配置"><a href="#三、常见-MCP-Server-的安装与配置" class="headerlink" title="三、常见 MCP Server 的安装与配置"></a>三、常见 MCP Server 的安装与配置</h1><h2 id="超能力一：Sequential-Thinking——AI-的”深度思考”模式"><a href="#超能力一：Sequential-Thinking——AI-的”深度思考”模式" class="headerlink" title="超能力一：Sequential Thinking——AI 的”深度思考”模式"></a>超能力一：Sequential Thinking——AI 的”深度思考”模式</h2><p>这是受欢迎程度最高的 MCP 服务，本质上是给 AI 模型增加深度思考能力。当我使用 Claude 3.7 测试时，它能够通过多轮思考，逐步拆解复杂问题，最终给出全面的解决方案。</p>
+<p>安装命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g @modelcontextprotocol/server-sequential-thinking</span><br></pre></td></tr></table></figure>
+
+<p>Cursor 配置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;mcpServers&quot;: &#123;</span><br><span class="line">      &quot;sequentialthinking&quot;: &#123;</span><br><span class="line">        &quot;isActive&quot;: true,</span><br><span class="line">        &quot;command&quot;: &quot;cmd&quot;,</span><br><span class="line">        &quot;args&quot;: [</span><br><span class="line">          &quot;/c&quot;,</span><br><span class="line">          &quot;npx&quot;,</span><br><span class="line">          &quot;@modelcontextprotocol/server-sequential-thinking&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;name&quot;: &quot;sequentialthinking&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>成功的话，是绿色 的<br><img src="https://ipfs.io/ipfs/QmahA2HwG1RdsmL8WT9uTst9wYCfjtbm1Dj6MLQD2hX2D7"></p>
+<p>例如提示词是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">使用思考能力，帮我想一下在当前项目中加入数学公式，需要做什么工作</span><br></pre></td></tr></table></figure>
+
+<p>这个 MCP 还蛮实用的，当我们碰到复杂的问题，或者比较艰巨的任务的时候，不妨试试这个工具，主动使用“深度思考”、“reasoning 模式”、“sequentialthinking”等关键词，就可以触发这个 MCP 服务的调用。</p>
+<h2 id="超能力二：Brave-Search-Fetch——信息检索的”黄金组合"><a href="#超能力二：Brave-Search-Fetch——信息检索的”黄金组合" class="headerlink" title="超能力二：Brave Search + Fetch——信息检索的”黄金组合&quot;"></a>超能力二：Brave Search + Fetch——信息检索的”黄金组合&quot;</h2><p>Brave Search MCP 使用 Brave Search API 进行信息检索。当然你得先去 Brave Search 的控制台去生成一个 API Key，才能使用这个 MCP。<br>安装命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g @modelcontextprotocol/server-brave-search</span><br></pre></td></tr></table></figure>
+
+<p>替换apikey会提示json如何写，复制去cursor即可。</p>
+<p>Cursor 配置mcp.json</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;mcpServers&quot;: &#123;</span><br><span class="line">    &quot;sequentialthinking&quot;: &#123;</span><br><span class="line">      &quot;isActive&quot;: true,</span><br><span class="line">      &quot;command&quot;: &quot;cmd&quot;,</span><br><span class="line">      &quot;args&quot;: [</span><br><span class="line">        &quot;/c&quot;,</span><br><span class="line">        &quot;npx&quot;,</span><br><span class="line">        &quot;@modelcontextprotocol/server-sequential-thinking&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;name&quot;: &quot;sequentialthinking&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;bravesearch&quot;: &#123;</span><br><span class="line">      &quot;isActive&quot;: true,</span><br><span class="line">      &quot;command&quot;: &quot;cmd&quot;,</span><br><span class="line">      &quot;args&quot;: [</span><br><span class="line">        &quot;/c&quot;,</span><br><span class="line">        &quot;npx&quot;,</span><br><span class="line">        &quot;@modelcontextprotocol/server-brave-search&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;env&quot;: &#123;</span><br><span class="line">        &quot;BRAVE_API_KEY&quot;: &quot;xxxxxx&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;name&quot;: &quot;bravesearch&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一开始可能是红色，刷新下就是绿色了。</p>
+<p>后续更新配置，限于文章篇幅，只提供新增的部分如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">, # 接上一个mcp的逗号不能少</span><br><span class="line">,</span><br><span class="line">    &quot;bravesearch&quot;: &#123;</span><br><span class="line">      &quot;isActive&quot;: true,</span><br><span class="line">      &quot;command&quot;: &quot;cmd&quot;,</span><br><span class="line">      &quot;args&quot;: [</span><br><span class="line">        &quot;/c&quot;,</span><br><span class="line">        &quot;npx&quot;,</span><br><span class="line">        &quot;@modelcontextprotocol/server-brave-search&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;env&quot;: &#123;</span><br><span class="line">        &quot;BRAVE_API_KEY&quot;: &quot;xxxxxx&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;name&quot;: &quot;bravesearch&quot;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>笔者测试时，折腾半天还是一直 called MCP tool 返回的都是 Error:fetch failed</p>
+<p>先不弄了。版本是0.49.6的cursor。</p>
+<h3 id="fetch使用uv安装"><a href="#fetch使用uv安装" class="headerlink" title="fetch使用uv安装"></a>fetch使用uv安装</h3><p>windows cmd执行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell -ExecutionPolicy ByPass -c &quot;irm https://astral.sh/uv/install.ps1 | iex&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ipfs.io/ipfs/QmZ5Ff7GMB8RWjzSqukTboXfHuodNQBqbvwzUvVtwwTiBQ"><br>C:\Users\Administrator.local\bin 环境变量加上，重启cmd执行 <code>uv help</code>就可以验证安装成功了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;fetch&quot;: &#123;</span><br><span class="line">  &quot;command&quot;: &quot;uvx&quot;,</span><br><span class="line">  &quot;args&quot;: [&quot;mcp-server-fetch&quot;],</span><br><span class="line">  &quot;name&quot;: &quot;fetch&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>command是uvx，也换成绝对路径。</p>
+<p>fetch 这个 MCP 服务可以抓取网页上的内容，以 markdown 的格式返回，比如上面访问各种网页就用到了 fetch 的能力。</p>
+<p>可以看到 fetch 返回的就是页面 markdown 内容，通过 brave+fetch 这样的精准组合，就能获取最新且最准确的信息。同样的手段还可以运用在查询 API 文档或最新资讯方面。</p>
+<p>应用场景：查询最新 API 文档、技术资讯、开源项目更新等</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用fetch查看下开源项目的https://github.com/sdcb/chats得到更新历史。</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ipfs.io/ipfs/QmdH122toeZTGtPjirGBeMKfckg4d5iMkh57QNAQuBwuhR"></p>
+<h2 id="超能力三：Magic-MCP——前端开发的”魔法师"><a href="#超能力三：Magic-MCP——前端开发的”魔法师" class="headerlink" title="超能力三：Magic MCP——前端开发的”魔法师&quot;"></a>超能力三：Magic MCP——前端开发的”魔法师&quot;</h2><p>Magic MCP 支持直接创建前端组件，所有组件均来自 21st.dev。使用”&#x2F;ui”指令，就能快速创建各种 UI 界面。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;21stdevmagic&quot;: &#123;</span><br><span class="line">  &quot;command&quot;: &quot;npx&quot;,</span><br><span class="line">  &quot;args&quot;: [&quot;-y&quot;, &quot;@21st-dev/magic@latest&quot;, &quot;API_KEY=\&quot;xxxxxxxxxx\&quot;&quot;],</span><br><span class="line">  &quot;name&quot;: &quot;21stdevmagic&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它的使用方式是用“&#x2F;ui”指令，比如，我让它来创建一个博客的项目：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/ui 帮我创建一个好看的个人博客项目</span><br></pre></td></tr></table></figure>
+
+<p>过程一路yes，直接打开了浏览器给我看3个选择，让我选<br><img src="https://ipfs.io/ipfs/QmUKpBfaQrbjzRxtueG2c3mfRrCqSpkFphTi4WzWD9NQj6"><br>中间的没渲染出来，1和3都不错了<br><img src="https://ipfs.io/ipfs/QmYXyyHT7EQsUMtxjeAu8QDFPMiqbyUL9EtfxUwJiTsKJT"><br><img src="https://ipfs.io/ipfs/QmRU4WoR34znGNDHg8TSpCpcpja4D3xme9cm42gtHZVD4c"><br>结束了，说明自己做了什么。<br><img src="https://ipfs.io/ipfs/QmdUPpzM27ZeLT6t5A3Y1N6Cj5h5qEBkGvHfSPbTtHqvUg"></p>
+<h2 id="超能力四：Github-MCP——开发者社区的无缝连接"><a href="#超能力四：Github-MCP——开发者社区的无缝连接" class="headerlink" title="超能力四：Github MCP——开发者社区的无缝连接"></a>超能力四：Github MCP——开发者社区的无缝连接</h2><p>Github MCP 允许直接调用 Github 的 OpenAI 能力，甚至可以直接提交 issue。我刚好在使用 github的项目的时候，遇到异常，就可以用 Github 的 MCP 提交了一个 issue：（）</p>
+<p>安装命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g @modelcontextprotocol/server-github</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&quot;github&quot;: &#123;</span><br><span class="line">  &quot;command&quot;: &quot;npx&quot;,</span><br><span class="line">  &quot;args&quot;: [</span><br><span class="line">    &quot;-y&quot;,</span><br><span class="line">    &quot;@modelcontextprotocol/server-github&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;env&quot;: &#123;</span><br><span class="line">    &quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;: &quot;xxxxxxxxxx&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;name&quot;: &quot;github&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ipfs.io/ipfs/QmP94Yhbzkummhk5GzE5mJSmng7zzZ5bEW3HzjNUZ9HpkF"><br>效果出奇的好，之前想着学习下如何提issue，这样自动化提交又工整又专业，真的要和ai学习如何提出问题了。（当然句尾也可以加上“注意issue用英文表达”）</p>
+<p>这种无缝连接开发者社区的能力，大大提升了协作效率和问题解决速度。</p>
+<h2 id="超能力五：Playwright-MCP——自动化测试的”魔术师"><a href="#超能力五：Playwright-MCP——自动化测试的”魔术师" class="headerlink" title="超能力五：Playwright MCP——自动化测试的”魔术师&quot;"></a>超能力五：Playwright MCP——自动化测试的”魔术师&quot;</h2><p>Playwright MCP 是一个强大的自动化测试工具，它能够帮助开发者在多种浏览器环境中进行端到端测试，大大简化了测试流程，提高了测试效率和准确性。</p>
+<p>安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">npm install -g playwright@1.43.0</span><br><span class="line">npx playwright@1.43.0 install chromium</span><br><span class="line">npm install -g @executeautomation/playwright-mcp-server</span><br></pre></td></tr></table></figure>
+
+<p>mcp.json加上后保存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;playwrightserver&quot;: &#123;</span><br><span class="line">  &quot;command&quot;: &quot;uvx&quot;,</span><br><span class="line">  &quot;args&quot;: [&quot;playwright-server&quot;],</span><br><span class="line">  &quot;name&quot;: &quot;playwrightserver&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>比如，我让它直接访问 <a href="http://qq.com，他会自动访问页面，并生成一张截图：">http://qq.com，他会自动访问页面，并生成一张截图：</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">帮我用playwrightserver访问一下www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://ipfs.io/ipfs/QmTP7taH3UBDwsmEY2sCtJBXwZiMEb8AB4PoirEGNXFAuh"><br>截图如下：<br><img src="https://ipfs.io/ipfs/QmSS9P6rXou6BRmuzsttdpAKVtfXHKixQk32bW9h2iJZa3"></p>
+<p>你可以让它处理复杂的页面交互，如表单提交、AJAX 请求、页面导航等，确保 Web 应用在各种环境下都能正常工作。很适合直接在编码的过程中做自动化测试。</p>
+<h1 id="未来展望：AI-编程的无限可能"><a href="#未来展望：AI-编程的无限可能" class="headerlink" title="未来展望：AI 编程的无限可能"></a>未来展望：AI 编程的无限可能</h1><p>随着 AI 技术的不断发展，MCP 协议也将持续完善，为开发者提供更多实用功能。我们可以期待：</p>
+<p>更多专业领域的 MCP 服务：针对数据科学、区块链、IoT 等特定领域的专业工具</p>
+<p>更深度的代码理解能力：不仅理解单个文件，还能理解整个项目架构和业务逻辑</p>
+<p>跨平台协作增强：与更多开发工具和平台的无缝集成</p>
+<p>自定义 MCP 的简化：让普通开发者也能轻松创建自己的 MCP 服务</p>
+<p>写在最后：拥抱变革，重新定义编程</p>
+<p>Cursor+MCP 的组合，为我们提供了一种全新的工作方式，让我们能够专注于创造性思维和解决方案设计，而将繁琐的实现细节交给 AI 助手。</p>
+<p>也许，如同 HTTP 是互联网的基石协议一样，MCP 可能将成为 AI 时代新的底层智能体互联协议，让我们共同期待！</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2025/05/06/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2code-server/">服务器部署code-server</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2025/04/26/Nvm%EF%BC%9ENode%E9%AB%98%E7%89%88%E6%9C%AC%E9%99%8D%E7%BA%A7%E4%B8%BA%E4%BD%8E%E7%89%88%E6%9C%AC%20/">Nvm＞Node高版本降级为低版本</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-text">一、环境准备</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%AA%8C%E8%AF%81%E7%8E%AF%E5%A2%83"><span class="toc-text">二、验证环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%B8%B8%E8%A7%81-MCP-Server-%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-text">三、常见 MCP Server 的安装与配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B6%85%E8%83%BD%E5%8A%9B%E4%B8%80%EF%BC%9ASequential-Thinking%E2%80%94%E2%80%94AI-%E7%9A%84%E2%80%9D%E6%B7%B1%E5%BA%A6%E6%80%9D%E8%80%83%E2%80%9D%E6%A8%A1%E5%BC%8F"><span class="toc-text">超能力一：Sequential Thinking——AI 的”深度思考”模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B6%85%E8%83%BD%E5%8A%9B%E4%BA%8C%EF%BC%9ABrave-Search-Fetch%E2%80%94%E2%80%94%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E7%9A%84%E2%80%9D%E9%BB%84%E9%87%91%E7%BB%84%E5%90%88"><span class="toc-text">超能力二：Brave Search + Fetch——信息检索的”黄金组合&quot;</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#fetch%E4%BD%BF%E7%94%A8uv%E5%AE%89%E8%A3%85"><span class="toc-text">fetch使用uv安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B6%85%E8%83%BD%E5%8A%9B%E4%B8%89%EF%BC%9AMagic-MCP%E2%80%94%E2%80%94%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91%E7%9A%84%E2%80%9D%E9%AD%94%E6%B3%95%E5%B8%88"><span class="toc-text">超能力三：Magic MCP——前端开发的”魔法师&quot;</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B6%85%E8%83%BD%E5%8A%9B%E5%9B%9B%EF%BC%9AGithub-MCP%E2%80%94%E2%80%94%E5%BC%80%E5%8F%91%E8%80%85%E7%A4%BE%E5%8C%BA%E7%9A%84%E6%97%A0%E7%BC%9D%E8%BF%9E%E6%8E%A5"><span class="toc-text">超能力四：Github MCP——开发者社区的无缝连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B6%85%E8%83%BD%E5%8A%9B%E4%BA%94%EF%BC%9APlaywright-MCP%E2%80%94%E2%80%94%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E7%9A%84%E2%80%9D%E9%AD%94%E6%9C%AF%E5%B8%88"><span class="toc-text">超能力五：Playwright MCP——自动化测试的”魔术师&quot;</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E5%B1%95%E6%9C%9B%EF%BC%9AAI-%E7%BC%96%E7%A8%8B%E7%9A%84%E6%97%A0%E9%99%90%E5%8F%AF%E8%83%BD"><span class="toc-text">未来展望：AI 编程的无限可能</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

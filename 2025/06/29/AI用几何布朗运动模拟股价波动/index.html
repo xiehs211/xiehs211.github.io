@@ -1,0 +1,844 @@
+
+<!DOCTYPE html><html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>AI用几何布朗运动模拟股价波动 - Hexo</title>
+
+  
+    <meta name="description" content="提示词1现在有一个名叫returns的Pandas Series，存储的是某股票的每日简单收益，使用Python定义一个函数，用于模拟该数据的几何布朗运动，请给出示例代码。  答案12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI用几何布朗运动模拟股价波动">
+<meta property="og:url" content="http://example.com/2025/06/29/AI%E7%94%A8%E5%87%A0%E4%BD%95%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8%E6%A8%A1%E6%8B%9F%E8%82%A1%E4%BB%B7%E6%B3%A2%E5%8A%A8/">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="提示词1现在有一个名叫returns的Pandas Series，存储的是某股票的每日简单收益，使用Python定义一个函数，用于模拟该数据的几何布朗运动，请给出示例代码。  答案12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/TKfYKuK.png">
+<meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/m5QDkuK.png">
+<meta property="article:published_time" content="2025-06-29T12:25:22.000Z">
+<meta property="article:modified_time" content="2025-08-15T14:03:44.973Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://roim-picx-bpc.pages.dev/rest/TKfYKuK.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2025-06-29T20:25:22+08:00","dateModified":"2025-08-15T22:03:44+08:00","datePublished":"2025-06-29T20:25:22+08:00","description":"","headline":"AI用几何布朗运动模拟股价波动","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/06/29/AI%E7%94%A8%E5%87%A0%E4%BD%95%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8%E6%A8%A1%E6%8B%9F%E8%82%A1%E4%BB%B7%E6%B3%A2%E5%8A%A8/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2025/06/29/AI%E7%94%A8%E5%87%A0%E4%BD%95%E5%B8%83%E6%9C%97%E8%BF%90%E5%8A%A8%E6%A8%A1%E6%8B%9F%E8%82%A1%E4%BB%B7%E6%B3%A2%E5%8A%A8/","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="Search"></form><div id="search-result"></div><div class="search-no-result">No Results!</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">Recent Update</span></div><div class="widget-body fs14"><a class="item title" href="/2025/08/11/%E5%AE%9D%E5%A1%94%E9%83%A8%E7%BD%B2message-pusher/"><span class="title">宝塔部署message-pusher</span></a><a class="item title" href="/2025/07/27/pine%E7%89%88%E6%9C%AC5%E8%BD%AC%E6%8D%A2%E4%B8%BA%E7%89%88%E6%9C%AC6%E5%90%8E%EF%BC%8C%E4%BA%A4%E6%98%93%E4%BF%A1%E5%8F%B7%E5%8F%98%E5%A4%9A%E4%BA%86%EF%BC%9F/"><span class="title">pine版本5转换为版本6后，交易信号变多了？</span></a><a class="item title" href="/2025/07/21/pine%20%E7%AD%96%E7%95%A5%E4%BA%A4%E6%98%93%E6%98%BE%E7%A4%BAlabel/"><span class="title">pine 策略交易显示label</span></a><a class="item title" href="/2025/07/20/pine%E6%9B%BF%E4%BB%A3ifelse%E7%9A%84switch%E8%AF%AD%E6%B3%95/"><span class="title">pine替代ifelse的switch语法</span></a><a class="item title" href="/2025/07/20/pine%E5%A4%9A%E5%B8%81%E7%A7%8D%E7%AD%96%E7%95%A5%E8%AD%A6%E6%8A%A5/"><span class="title">pine多币种策略警报</span></a><a class="item title" href="/2025/07/19/pine%E5%9B%BE%E4%B8%AD%E6%A0%87%E7%AD%BE%E5%88%B6%E4%BD%9C%E5%8F%8A%E7%BE%8E%E5%8C%96/"><span class="title">pine图中标签制作及美化</span></a><a class="item title" href="/2025/07/18/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E9%80%89%E6%8B%A9%E7%AD%96%E7%95%A5/"><span class="title">pine多指标选择策略</span></a><a class="item title" href="/2025/07/17/pine%E7%89%88%E6%9C%AC6%E8%87%AA%E5%AE%9A%E4%B9%89%E5%87%BD%E6%95%B0%E6%94%AF%E6%8C%81%E5%91%BD%E5%90%8D%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92/"><span class="title">pine版本6自定义函数支持命名参数传递</span></a><a class="item title" href="/2025/07/17/pine%E5%A4%9A%E6%8C%87%E6%A0%87%E5%BB%BA%E7%AB%8B%E8%AD%A6%E6%8A%A5/"><span class="title">pine多指标建立警报</span></a><a class="item title" href="/2025/07/09/%E5%BC%80%E9%80%9A%E6%90%AC%E7%93%A6%E5%B7%A5%E7%A7%AF%E5%88%86/"><span class="title">开通搬瓦工积分</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">Home</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">Blog</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">Posted on: <time datetime="2025-06-29T12:25:22.000Z">2025-06-29</time></span><span class="sep updated"></span><span class="text updated">Updated on: <time datetime="2025-08-15T14:03:44.973Z">2025-08-15</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>AI用几何布朗运动模拟股价波动</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h1 id="提示词"><a href="#提示词" class="headerlink" title="提示词"></a>提示词</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">现在有一个名叫returns的Pandas Series，存储的是某股票的每日简单收益，使用Python定义一个函数，用于模拟该数据的几何布朗运动，请给出示例代码。</span><br></pre></td></tr></table></figure>
+
+<h1 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">def simulate_gbm(returns, S0, T=1.0, dt=1/252, num_sims=1000):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    使用几何布朗运动模拟股票价格路径</span><br><span class="line">  </span><br><span class="line">    参数:</span><br><span class="line">    returns : pandas.Series - 股票每日简单收益率</span><br><span class="line">    S0      : float - 初始股票价格</span><br><span class="line">    T       : float - 模拟总时间（年）</span><br><span class="line">    dt      : float - 时间步长（年，默认1/252表示交易日）</span><br><span class="line">    num_sims: int   - 模拟路径数量</span><br><span class="line">  </span><br><span class="line">    返回:</span><br><span class="line">    numpy.ndarray - 形状为(num_steps, num_sims)的模拟价格路径</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    # 1. 计算对数收益率</span><br><span class="line">    log_returns = np.log(1 + returns)</span><br><span class="line">  </span><br><span class="line">    # 2. 估计模型参数（年化）</span><br><span class="line">    mu = log_returns.mean() * 252           # 年化漂移率</span><br><span class="line">    sigma = log_returns.std() * np.sqrt(252) # 年化波动率</span><br><span class="line">    adj_drift = mu - 0.5 * sigma**2         # 调整后的漂移项</span><br><span class="line">  </span><br><span class="line">    # 3. 设置时间参数</span><br><span class="line">    num_steps = int(T / dt)  # 总步数</span><br><span class="line">  </span><br><span class="line">    # 4. 生成随机路径</span><br><span class="line">    dW = np.random.normal(0, np.sqrt(dt), size=(num_steps, num_sims))  # 维纳过程增量</span><br><span class="line">    price_paths = np.zeros((num_steps, num_sims))</span><br><span class="line">    price_paths[0] = S0  # 设置初始价格</span><br><span class="line">  </span><br><span class="line">    # 5. 迭代计算价格路径</span><br><span class="line">    for t in range(1, num_steps):</span><br><span class="line">        price_paths[t] = price_paths[t-1] * np.exp(</span><br><span class="line">            adj_drift * dt + sigma * dW[t]</span><br><span class="line">        )</span><br><span class="line">  </span><br><span class="line">    return price_paths</span><br><span class="line"></span><br><span class="line"># 示例用法</span><br><span class="line">if __name__ == &quot;__main__&quot;:</span><br><span class="line">    # 生成示例收益率数据（假设有252个交易日）</span><br><span class="line">    # np.random.seed(42)</span><br><span class="line">    # returns = pd.Series(np.random.normal(0.001, 0.02, 252))</span><br><span class="line">  </span><br><span class="line">    # 模拟参数</span><br><span class="line">    S0 = returns.loc[returns.index[-1],]    # 初始价格</span><br><span class="line">    T = 1.0       # 1年</span><br><span class="line">    dt = 1/252    # 每日时间步长</span><br><span class="line">    num_sims = 5  # 模拟5条路径</span><br><span class="line">  </span><br><span class="line">    # 运行模拟</span><br><span class="line">    paths = simulate_gbm(returns, S0, T, dt, num_sims)</span><br><span class="line">  </span><br><span class="line">    # 可视化结果</span><br><span class="line">    import matplotlib.pyplot as plt</span><br><span class="line">  </span><br><span class="line">    plt.figure(figsize=(12, 6))</span><br><span class="line">    for i in range(num_sims):</span><br><span class="line">        plt.plot(paths[:, i])</span><br><span class="line">    plt.title(&#x27;几何布朗运动 - 股票价格模拟&#x27;)</span><br><span class="line">    plt.xlabel(&#x27;交易日&#x27;)</span><br><span class="line">    plt.ylabel(&#x27;价格&#x27;)</span><br><span class="line">    plt.grid(alpha=0.3)</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+
+<p>结果：<br><img src="https://roim-picx-bpc.pages.dev/rest/TKfYKuK.png"></p>
+<h1 id="使用定义好的函数模拟股价变动"><a href="#使用定义好的函数模拟股价变动" class="headerlink" title="使用定义好的函数模拟股价变动"></a>使用定义好的函数模拟股价变动</h1><p>ai实际一步到位可视化了，不过我们还是简化代码加描述。再来一次</p>
+<h2 id="提示词-1"><a href="#提示词-1" class="headerlink" title="提示词"></a>提示词</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># Python代码</span><br><span class="line"># 首先我们需要将数据拆分一下</span><br><span class="line">train = returns[&#x27;2022&#x27;]</span><br><span class="line">test = returns[&#x27;2023&#x27;]</span><br><span class="line"></span><br><span class="line"># 然后我们使用训练集计算相关参数</span><br><span class="line">T = len(test)</span><br><span class="line">N = len(test)</span><br><span class="line">S_0 = df.loc[train.index[-1], &quot;收盘&quot;]# 初始的股票价格</span><br><span class="line">N_SIM = 50 # 模拟的次数</span><br><span class="line">mu = train.mean()# 公式中的mu</span><br><span class="line">sigma = train.std()# 公式中的sigma</span><br><span class="line">def geometric_brownian_motion(s_0, mu, sigma, n_sims, T, N, random_seed=42):  </span><br><span class="line">    &quot;&quot;&quot;  </span><br><span class="line">    定义一个函数，用于模拟股票价格的几何布朗运动过程。  </span><br><span class="line">    参数：  </span><br><span class="line">    s_0: 股票的初始价格  </span><br><span class="line">    mu: 预期年化收益率  </span><br><span class="line">    sigma: 年化波动率  </span><br><span class="line">    n_sims: 模拟次数  </span><br><span class="line">    T: 模拟的总时间（以年为单位）  </span><br><span class="line">    N: 时间步长数，即总时间被分割成的块数  </span><br><span class="line">    random_seed: 随机种子，用于产生随机数（默认为42）  </span><br><span class="line">    返回值：  </span><br><span class="line">    模拟的股票价格序列，形状为(n_sims, N+1)，其中N+1是因为在模拟开始时插入了一个初始价格s_0。  </span><br><span class="line">    &quot;&quot;&quot;  </span><br><span class="line">    # 设置随机种子，确保每次运行产生的随机数相同</span><br><span class="line">    np.random.seed(random_seed)  </span><br><span class="line">    # 计算时间步长，即每个时间块的大小</span><br><span class="line">    dt = T/N</span><br><span class="line">    # 生成N个标准正态分布的随机扰动项，每个扰动项的大小由时间步长决定</span><br><span class="line">    dW = np.random.normal(scale=np.sqrt(dt),  </span><br><span class="line">                          size=(n_sims, N))   </span><br><span class="line">    # 对每行（每个模拟）的扰动项进行累加，得到W序列 </span><br><span class="line">    W = np.cumsum(dW, axis=1)</span><br><span class="line">    # 创建一个从dt到T的时间步长序列，用于描述整个模拟时间区间</span><br><span class="line">    time_step = np.linspace(dt, T, N)</span><br><span class="line">    # 将时间步长序列扩展到(n_sims, N)的形状，以便于每个模拟都有对应的时间步长</span><br><span class="line">    time_steps = np.broadcast_to(time_step, (n_sims, N))</span><br><span class="line">    # 定义一个表达式，描述股票价格的随机变化过程 </span><br><span class="line">    S_t = ( </span><br><span class="line">        s_0 * np.exp((mu - 0.5 * sigma**2) * time_steps + sigma * W)  </span><br><span class="line">    )  </span><br><span class="line">    # 在S_t的每行的开头插入初始价格s_0，形成完整的股票价格序列 </span><br><span class="line">    S_t = np.insert(S_t, 0, s_0, axis=1)  </span><br><span class="line">    # 返回模拟的股票价格序列</span><br><span class="line">    return S_t</span><br><span class="line"></span><br><span class="line">接下来使用上面定义好的几何布朗运动函数模拟returns数据，并将结果可视化，请给出示例代码。</span><br></pre></td></tr></table></figure>
+
+<h2 id="答案-1"><a href="#答案-1" class="headerlink" title="答案"></a>答案</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import pandas as pd</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">import matplotlib.dates as mdates</span><br><span class="line">from matplotlib.ticker import FuncFormatter</span><br><span class="line"></span><br><span class="line"># 运行模拟</span><br><span class="line">simulated_paths = geometric_brownian_motion(S_0, mu, sigma, N_SIM, T, N)</span><br><span class="line"></span><br><span class="line"># 创建与测试集对应的时间索引</span><br><span class="line">date_index = pd.date_range(start=train.index[-1], periods=N+1, freq=&#x27;D&#x27;)[:N+1]</span><br><span class="line"></span><br><span class="line"># ======================</span><br><span class="line"># 可视化部分</span><br><span class="line"># ======================</span><br><span class="line"></span><br><span class="line"># 1. 模拟路径与真实价格对比</span><br><span class="line">plt.figure(figsize=(14, 7))</span><br><span class="line">plt.title(f&quot;股票价格蒙特卡洛模拟 (N=&#123;N_SIM&#125;次)\nμ=&#123;mu:.4f&#125;, σ=&#123;sigma:.4f&#125;&quot;, fontsize=14)</span><br><span class="line"></span><br><span class="line"># 绘制所有模拟路径（半透明处理）</span><br><span class="line">for i in range(N_SIM):</span><br><span class="line">    plt.plot(date_index, simulated_paths[i], lw=1, alpha=0.15, color=&#x27;steelblue&#x27;)</span><br><span class="line"></span><br><span class="line"># 计算并绘制关键统计量</span><br><span class="line">mean_path = np.mean(simulated_paths, axis=0)</span><br><span class="line">upper_95 = np.percentile(simulated_paths, 95, axis=0)</span><br><span class="line">lower_5 = np.percentile(simulated_paths, 5, axis=0)</span><br><span class="line"></span><br><span class="line">plt.plot(date_index, mean_path, &#x27;b-&#x27;, lw=2, label=&#x27;模拟均值路径&#x27;)</span><br><span class="line">plt.plot(date_index, upper_95, &#x27;r--&#x27;, lw=1.5, label=&#x27;95%分位数&#x27;)</span><br><span class="line">plt.plot(date_index, lower_5, &#x27;g--&#x27;, lw=1.5, label=&#x27;5%分位数&#x27;)</span><br><span class="line"></span><br><span class="line"># 添加实际价格曲线（测试期）</span><br><span class="line">test_period = df.loc[test.index, &#x27;收盘&#x27;]</span><br><span class="line">plt.plot(test_period.index, test_period.values, &#x27;k-&#x27;, lw=2.5, label=&#x27;实际价格&#x27;)</span><br><span class="line"></span><br><span class="line"># 美化坐标轴</span><br><span class="line">plt.gca().xaxis.set_major_locator(mdates.MonthLocator())</span><br><span class="line">plt.gca().xaxis.set_major_formatter(mdates.DateFormatter(&#x27;%Y-%m&#x27;))</span><br><span class="line">plt.gcf().autofmt_xdate()  # 自动旋转日期标签</span><br><span class="line"></span><br><span class="line"># 添加图例和网格</span><br><span class="line">plt.legend(loc=&#x27;upper left&#x27;)</span><br><span class="line">plt.grid(True, alpha=0.3)</span><br><span class="line">plt.xlabel(&#x27;日期&#x27;)</span><br><span class="line">plt.ylabel(&#x27;价格&#x27;)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.savefig(&#x27;GBM_模拟路径对比.png&#x27;, dpi=300)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"># 2. 模拟路径与真实价格差异分析（最后一天）</span><br><span class="line">final_prices = simulated_paths[:, -1]</span><br><span class="line">actual_final_price = test_period.iloc[-1]</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(10, 6))</span><br><span class="line">plt.hist(final_prices, bins=50, alpha=0.7, color=&#x27;skyblue&#x27;, edgecolor=&#x27;navy&#x27;)</span><br><span class="line">plt.axvline(x=actual_final_price, color=&#x27;red&#x27;, linestyle=&#x27;--&#x27;, lw=2, </span><br><span class="line">            label=f&#x27;实际价格: &#123;actual_final_price:.2f&#125;&#x27;)</span><br><span class="line">plt.axvline(x=np.mean(final_prices), color=&#x27;green&#x27;, linestyle=&#x27;-&#x27;, lw=2, </span><br><span class="line">            label=f&#x27;模拟均值: &#123;np.mean(final_prices):.2f&#125;&#x27;)</span><br><span class="line"></span><br><span class="line"># 添加统计指标</span><br><span class="line">plt.text(0.75, 0.9, f&#x27;模拟标准差: &#123;np.std(final_prices):.2f&#125;&#x27;,</span><br><span class="line">         transform=plt.gca().transAxes, fontsize=12)</span><br><span class="line">plt.text(0.75, 0.85, f&#x27;偏度: &#123;pd.Series(final_prices).skew():.2f&#125;&#x27;,</span><br><span class="line">         transform=plt.gca().transAxes, fontsize=12)</span><br><span class="line"></span><br><span class="line">plt.title(&#x27;模拟期末价格分布 vs 实际价格&#x27;, fontsize=14)</span><br><span class="line">plt.xlabel(&#x27;期末价格&#x27;)</span><br><span class="line">plt.ylabel(&#x27;频率&#x27;)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.grid(alpha=0.2)</span><br><span class="line">plt.savefig(&#x27;GBM_期末价格分布.png&#x27;, dpi=300)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"># 3. 动态预测区间（随时间变化的置信区间）</span><br><span class="line">plt.figure(figsize=(14, 7))</span><br><span class="line">plt.fill_between(date_index, </span><br><span class="line">                 np.percentile(simulated_paths, 5, axis=0),</span><br><span class="line">                 np.percentile(simulated_paths, 95, axis=0),</span><br><span class="line">                 color=&#x27;lightblue&#x27;, alpha=0.5, label=&#x27;90%置信区间&#x27;)</span><br><span class="line"></span><br><span class="line">plt.plot(date_index, mean_path, &#x27;b-&#x27;, lw=2, label=&#x27;模拟均值&#x27;)</span><br><span class="line">plt.plot(test_period.index, test_period.values, &#x27;k-&#x27;, lw=2.5, label=&#x27;实际价格&#x27;)</span><br><span class="line"></span><br><span class="line"># 标记关键事件点</span><br><span class="line">max_dev_idx = np.argmax(np.abs(test_period.values - mean_path[1:]))</span><br><span class="line">event_date = test_period.index[max_dev_idx]</span><br><span class="line">plt.axvline(x=event_date, color=&#x27;purple&#x27;, linestyle=&#x27;:&#x27;, alpha=0.8)</span><br><span class="line">plt.text(event_date, plt.ylim()[0]*0.95, f&#x27;最大偏离点\n&#123;event_date.strftime(&quot;%Y-%m-%d&quot;)&#125;&#x27;, </span><br><span class="line">         ha=&#x27;center&#x27;, fontsize=9)</span><br><span class="line"></span><br><span class="line">plt.title(&#x27;GBM模拟的90%置信区间与实际价格对比&#x27;, fontsize=14)</span><br><span class="line">plt.xlabel(&#x27;日期&#x27;)</span><br><span class="line">plt.ylabel(&#x27;价格&#x27;)</span><br><span class="line">plt.legend(loc=&#x27;upper left&#x27;)</span><br><span class="line">plt.gca().xaxis.set_major_locator(mdates.MonthLocator(interval=2))</span><br><span class="line">plt.gca().xaxis.set_major_formatter(mdates.DateFormatter(&#x27;%Y-%m&#x27;))</span><br><span class="line">plt.gcf().autofmt_xdate()</span><br><span class="line">plt.grid(alpha=0.3)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.savefig(&#x27;GBM_动态置信区间.png&#x27;, dpi=300)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"># 4. 计算预测误差指标</span><br><span class="line">simulated_mean = mean_path[1:]</span><br><span class="line">actual_prices = test_period.values</span><br><span class="line"></span><br><span class="line">mae = np.mean(np.abs(simulated_mean - actual_prices))</span><br><span class="line">rmse = np.sqrt(np.mean((simulated_mean - actual_prices)**2))</span><br><span class="line"></span><br><span class="line">print(&quot;\n模型性能评估:&quot;)</span><br><span class="line">print(f&quot;平均绝对误差(MAE): &#123;mae:.4f&#125;&quot;)</span><br><span class="line">print(f&quot;均方根误差(RMSE): &#123;rmse:.4f&#125;&quot;)</span><br><span class="line">print(f&quot;年化波动率预测: &#123;sigma:.4f&#125; (实际: &#123;test.std()*np.sqrt(252):.4f&#125;)&quot;)</span><br><span class="line"></span><br><span class="line"># 5. 关键日期对比表</span><br><span class="line">compare_dates = [test_period.index[0], test_period.index[len(test)//2], test_period.index[-1]]</span><br><span class="line">compare_data = []</span><br><span class="line"></span><br><span class="line">valid_dates = [d for d in compare_dates if d in date_index]</span><br><span class="line"># valid_dates</span><br><span class="line"></span><br><span class="line">for date in valid_dates:</span><br><span class="line">    idx = np.where(date_index == date)[0][0]</span><br><span class="line">    actual = df.loc[date, &#x27;收盘&#x27;]</span><br><span class="line">    sim_mean = mean_path[idx]</span><br><span class="line">    sim_median = np.median(simulated_paths[:, idx])</span><br><span class="line">  </span><br><span class="line">    compare_data.append([</span><br><span class="line">        date.strftime(&#x27;%Y-%m-%d&#x27;),</span><br><span class="line">        actual,</span><br><span class="line">        sim_mean,</span><br><span class="line">        sim_median,</span><br><span class="line">        actual - sim_mean</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line"># 创建对比表格</span><br><span class="line">compare_df = pd.DataFrame(compare_data, </span><br><span class="line">                          columns=[&#x27;日期&#x27;, &#x27;实际价格&#x27;, &#x27;模拟均值&#x27;, &#x27;模拟中位数&#x27;, &#x27;偏差&#x27;])</span><br><span class="line">print(&quot;\n关键日期价格对比:&quot;)</span><br><span class="line">print(compare_df.to_string(index=False))</span><br></pre></td></tr></table></figure>
+
+<p>结果：<br><img src="https://roim-picx-bpc.pages.dev/rest/m5QDkuK.png"></p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>License</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">Newer</div><a href="/2025/06/29/AI%E5%AE%9E%E7%8E%B0GARCH%E6%A8%A1%E5%9E%8B/">AI实现GARCH模型</a></div><div class="item" id="next"><div class="note">Older</div><a href="/2025/06/28/AI%E5%AE%9E%E7%8E%B0ARCH%E6%A8%A1%E5%9E%8B/">AI实现ARCH模型</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">On This Page</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="toc-text">提示词</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AD%94%E6%A1%88"><span class="toc-text">答案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%AE%9A%E4%B9%89%E5%A5%BD%E7%9A%84%E5%87%BD%E6%95%B0%E6%A8%A1%E6%8B%9F%E8%82%A1%E4%BB%B7%E5%8F%98%E5%8A%A8"><span class="toc-text">使用定义好的函数模拟股价变动</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D-1"><span class="toc-text">提示词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AD%94%E6%A1%88-1"><span class="toc-text">答案</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>Scroll to Top</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `Just`,
+      min: `minutes ago`,
+      hour: `hours ago`,
+      day: `days ago`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `Switched to Light Mode`,
+      dark: `Switched to Dark Mode`,
+      auto: `Switched to Auto Mode`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
