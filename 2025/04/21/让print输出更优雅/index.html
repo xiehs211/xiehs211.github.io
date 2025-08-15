@@ -1,5 +1,5 @@
 
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="zh">
 
 <head>
   <meta charset="utf-8">
@@ -17,24 +17,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>让print输出更优雅 - Hexo</title>
+  <title>让print输出更优雅 - 生生不息</title>
 
   
     <meta name="description" content="背景有时候，print输出内容越长，控制台越难读，要复制去记事本然后换行，或者搜索排查错误。 解决方案我们可以使用pprint print()和pprint()都是python的打印模块，功能基本一样，唯一的区别就是pprint()模块打印出来的数据结构更加完整，每行为一个数据结构，更加方便阅读打印输出结果。 特别是对于特别长的数据打印，print()输出结果都在一行，不方便查看，而pprint(">
 <meta property="og:type" content="article">
 <meta property="og:title" content="让print输出更优雅">
-<meta property="og:url" content="http://example.com/2025/04/21/%E8%AE%A9print%E8%BE%93%E5%87%BA%E6%9B%B4%E4%BC%98%E9%9B%85/">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="https://xiehs211.github.io/2025/04/21/%E8%AE%A9print%E8%BE%93%E5%87%BA%E6%9B%B4%E4%BC%98%E9%9B%85/">
+<meta property="og:site_name" content="生生不息">
 <meta property="og:description" content="背景有时候，print输出内容越长，控制台越难读，要复制去记事本然后换行，或者搜索排查错误。 解决方案我们可以使用pprint print()和pprint()都是python的打印模块，功能基本一样，唯一的区别就是pprint()模块打印出来的数据结构更加完整，每行为一个数据结构，更加方便阅读打印输出结果。 特别是对于特别长的数据打印，print()输出结果都在一行，不方便查看，而pprint(">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale">
 <meta property="article:published_time" content="2025-04-21T12:25:22.000Z">
 <meta property="article:modified_time" content="2025-08-15T13:44:37.366Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="xiehs211">
+<meta property="article:tag" content="PVE, R, Linux, Python, SEO, Blockchain">
 <meta name="twitter:card" content="summary">
   
   
   
-  
+  <meta name="keywords" content="PVE, R, Linux, Python, SEO, Blockchain">
 
   <!-- feed -->
   
@@ -46,7 +47,7 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2025-04-21T20:25:22+08:00","dateModified":"2025-08-15T21:44:37+08:00","datePublished":"2025-04-21T20:25:22+08:00","description":"","headline":"让print输出更优雅","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/04/21/%E8%AE%A9print%E8%BE%93%E5%87%BA%E6%9B%B4%E4%BC%98%E9%9B%85/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2025/04/21/%E8%AE%A9print%E8%BE%93%E5%87%BA%E6%9B%B4%E4%BC%98%E9%9B%85/","image":[]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"xiehs211","sameAs":[]},"dateCreated":"2025-04-21T20:25:22+08:00","dateModified":"2025-08-15T21:44:37+08:00","datePublished":"2025-04-21T20:25:22+08:00","description":"","headline":"让print输出更优雅","mainEntityOfPage":{"@type":"WebPage","@id":"https://xiehs211.github.io/2025/04/21/%E8%AE%A9print%E8%BE%93%E5%87%BA%E6%9B%B4%E4%BC%98%E9%9B%85/"},"publisher":{"@type":"Organization","name":"xiehs211","sameAs":[]},"url":"https://xiehs211.github.io/2025/04/21/%E8%AE%A9print%E8%BE%93%E5%87%BA%E6%9B%B4%E4%BC%98%E9%9B%85/","image":[]}</script>
   
 </head>
 <body>
@@ -54,7 +55,7 @@
 <div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
-<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">生生不息</div><div class="sub cap">生命不息，折腾不止！</div></a></div></header>
 
 <div class="nav-area">
 
@@ -118,7 +119,7 @@
 
 
 
-<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">xiehs211</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
 <div class="widgets">

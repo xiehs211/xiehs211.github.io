@@ -1,5 +1,5 @@
 
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="zh">
 
 <head>
   <meta charset="utf-8">
@@ -17,26 +17,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>AI添加K线图成交量 - Hexo</title>
+  <title>AI添加K线图成交量 - 生生不息</title>
 
   
     <meta name="description" content="提示词1在一个DataFrame中，包含股票的开盘价、最高价、最低价、收盘价、成交量。需要用Ploty绘制K线图，添加20日、30日均线，并将成交量以子图的形式绘制在K线图的下方。请给出示例代码。  答案12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AI添加K线图成交量">
-<meta property="og:url" content="http://example.com/2025/06/22/AI%E6%B7%BB%E5%8A%A0K%E7%BA%BF%E5%9B%BE%E6%88%90%E4%BA%A4%E9%87%8F/">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="https://xiehs211.github.io/2025/06/22/AI%E6%B7%BB%E5%8A%A0K%E7%BA%BF%E5%9B%BE%E6%88%90%E4%BA%A4%E9%87%8F/">
+<meta property="og:site_name" content="生生不息">
 <meta property="og:description" content="提示词1在一个DataFrame中，包含股票的开盘价、最高价、最低价、收盘价、成交量。需要用Ploty绘制K线图，添加20日、30日均线，并将成交量以子图的形式绘制在K线图的下方。请给出示例代码。  答案12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale">
 <meta property="og:image" content="https://roim-picx-bpc.pages.dev/rest/SVXhvUK.png">
 <meta property="article:published_time" content="2025-06-22T12:25:22.000Z">
 <meta property="article:modified_time" content="2025-08-15T13:56:52.428Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="xiehs211">
+<meta property="article:tag" content="PVE, R, Linux, Python, SEO, Blockchain">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://roim-picx-bpc.pages.dev/rest/SVXhvUK.png">
   
   
   
-  
+  <meta name="keywords" content="PVE, R, Linux, Python, SEO, Blockchain">
 
   <!-- feed -->
   
@@ -48,7 +49,7 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2025-06-22T20:25:22+08:00","dateModified":"2025-08-15T21:56:52+08:00","datePublished":"2025-06-22T20:25:22+08:00","description":"","headline":"AI添加K线图成交量","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/06/22/AI%E6%B7%BB%E5%8A%A0K%E7%BA%BF%E5%9B%BE%E6%88%90%E4%BA%A4%E9%87%8F/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2025/06/22/AI%E6%B7%BB%E5%8A%A0K%E7%BA%BF%E5%9B%BE%E6%88%90%E4%BA%A4%E9%87%8F/","image":[]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"xiehs211","sameAs":[]},"dateCreated":"2025-06-22T20:25:22+08:00","dateModified":"2025-08-15T21:56:52+08:00","datePublished":"2025-06-22T20:25:22+08:00","description":"","headline":"AI添加K线图成交量","mainEntityOfPage":{"@type":"WebPage","@id":"https://xiehs211.github.io/2025/06/22/AI%E6%B7%BB%E5%8A%A0K%E7%BA%BF%E5%9B%BE%E6%88%90%E4%BA%A4%E9%87%8F/"},"publisher":{"@type":"Organization","name":"xiehs211","sameAs":[]},"url":"https://xiehs211.github.io/2025/06/22/AI%E6%B7%BB%E5%8A%A0K%E7%BA%BF%E5%9B%BE%E6%88%90%E4%BA%A4%E9%87%8F/","image":[]}</script>
   
 </head>
 <body>
@@ -56,7 +57,7 @@
 <div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
-<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">生生不息</div><div class="sub cap">生命不息，折腾不止！</div></a></div></header>
 
 <div class="nav-area">
 
@@ -115,7 +116,7 @@
 
 
 
-<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">xiehs211</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
 <div class="widgets">

@@ -1,5 +1,5 @@
 
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="zh">
 
 <head>
   <meta charset="utf-8">
@@ -17,24 +17,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>理解矩阵（二） - Hexo</title>
+  <title>理解矩阵（二） - 生生不息</title>
 
   
     <meta name="description" content="背景备份孟岩的理解矩阵系列文章。 内容接着理解矩阵。 上一篇里说“矩阵是运动的描述”，到现在为止，好像大家都还没什么意见。但是我相信早晚会有数学系出身的网友来拍板转。因为运动这个概念，在数学和物理里是跟微积分联系在一起的。我们学习微积分的时候，总会有人照本宣科地告诉你，初等数学是研究常量的数学，是研究静态的数学，高等数学是变量的数学，是研究运动的数学。大家口口相传，差不多人人都知道这句话。但是真知">
 <meta property="og:type" content="article">
 <meta property="og:title" content="理解矩阵（二）">
-<meta property="og:url" content="http://example.com/2025/01/13/%E7%90%86%E8%A7%A3%E7%9F%A9%E9%98%B5%EF%BC%88%E4%BA%8C%EF%BC%89/">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="https://xiehs211.github.io/2025/01/13/%E7%90%86%E8%A7%A3%E7%9F%A9%E9%98%B5%EF%BC%88%E4%BA%8C%EF%BC%89/">
+<meta property="og:site_name" content="生生不息">
 <meta property="og:description" content="背景备份孟岩的理解矩阵系列文章。 内容接着理解矩阵。 上一篇里说“矩阵是运动的描述”，到现在为止，好像大家都还没什么意见。但是我相信早晚会有数学系出身的网友来拍板转。因为运动这个概念，在数学和物理里是跟微积分联系在一起的。我们学习微积分的时候，总会有人照本宣科地告诉你，初等数学是研究常量的数学，是研究静态的数学，高等数学是变量的数学，是研究运动的数学。大家口口相传，差不多人人都知道这句话。但是真知">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale">
 <meta property="article:published_time" content="2025-01-13T12:25:22.000Z">
 <meta property="article:modified_time" content="2025-08-15T13:37:01.607Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="xiehs211">
+<meta property="article:tag" content="PVE, R, Linux, Python, SEO, Blockchain">
 <meta name="twitter:card" content="summary">
   
   
   
-  
+  <meta name="keywords" content="PVE, R, Linux, Python, SEO, Blockchain">
 
   <!-- feed -->
   
@@ -46,7 +47,7 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"John Doe","sameAs":[]},"dateCreated":"2025-01-13T20:25:22+08:00","dateModified":"2025-08-15T21:37:01+08:00","datePublished":"2025-01-13T20:25:22+08:00","description":"","headline":"理解矩阵（二）","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/01/13/%E7%90%86%E8%A7%A3%E7%9F%A9%E9%98%B5%EF%BC%88%E4%BA%8C%EF%BC%89/"},"publisher":{"@type":"Organization","name":"John Doe","sameAs":[]},"url":"http://example.com/2025/01/13/%E7%90%86%E8%A7%A3%E7%9F%A9%E9%98%B5%EF%BC%88%E4%BA%8C%EF%BC%89/","image":[]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"xiehs211","sameAs":[]},"dateCreated":"2025-01-13T20:25:22+08:00","dateModified":"2025-08-15T21:37:01+08:00","datePublished":"2025-01-13T20:25:22+08:00","description":"","headline":"理解矩阵（二）","mainEntityOfPage":{"@type":"WebPage","@id":"https://xiehs211.github.io/2025/01/13/%E7%90%86%E8%A7%A3%E7%9F%A9%E9%98%B5%EF%BC%88%E4%BA%8C%EF%BC%89/"},"publisher":{"@type":"Organization","name":"xiehs211","sameAs":[]},"url":"https://xiehs211.github.io/2025/01/13/%E7%90%86%E8%A7%A3%E7%9F%A9%E9%98%B5%EF%BC%88%E4%BA%8C%EF%BC%89/","image":[]}</script>
   
 </head>
 <body>
@@ -54,7 +55,7 @@
 <div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
-<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Hexo</div></a></div></header>
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="undefined" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">生生不息</div><div class="sub cap">生命不息，折腾不止！</div></a></div></header>
 
 <div class="nav-area">
 
@@ -133,7 +134,7 @@
 
 
 
-<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">John Doe</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">xiehs211</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
 <div class="widgets">
